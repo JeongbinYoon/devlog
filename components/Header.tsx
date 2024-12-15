@@ -6,7 +6,9 @@ const Header = () => {
     <header>
       <div className='flex justify-between items-center max-w-3xl h-16 mx-auto'>
         <h1>LOGO</h1>
-        <Nav />
+        <div className='hidden md:block'>
+          <Nav />
+        </div>
         <HeaderTools />
       </div>
     </header>
