@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useRef, useState, useLayoutEffect } from 'react';
@@ -25,6 +27,7 @@ const Nav = () => {
 
     if (currentMenu) {
       const { offsetWidth, offsetHeight, offsetLeft } = currentMenu;
+
       setHighlightStyle({
         width: `${offsetWidth}px`,
         height: `${offsetHeight}px`,
@@ -34,6 +37,7 @@ const Nav = () => {
       setIsLoading(false);
     }
   }, [pathName]);
+
   return (
     <nav className='hidden sm:flex relative h-fit'>
       {menuItems.map((menu, idx) => (
