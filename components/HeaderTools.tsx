@@ -14,7 +14,7 @@ interface ButtonType {
   Icon: ComponentType<React.SVGProps<SVGSVGElement>>;
   label: string;
   className?: string;
-  iconSize?: number;
+  iconSize?: string;
   action?: () => void;
 }
 
@@ -22,7 +22,7 @@ const IconButton = ({
   Icon,
   label,
   className = '',
-  iconSize = 5,
+  iconSize = 'size-5',
   action,
 }: ButtonType) => (
   <button
@@ -30,7 +30,7 @@ const IconButton = ({
     aria-label={label}
     onClick={action}
   >
-    <Icon className={`size-${iconSize}`} />
+    <Icon className={iconSize} />
   </button>
 );
 
@@ -39,7 +39,11 @@ const HeaderTools = () => {
 
   return (
     <div className='flex gap-1'>
-      <IconButton Icon={MagnifyingGlassIcon} label={'검색'} iconSize={4} />
+      <IconButton
+        Icon={MagnifyingGlassIcon}
+        label={'검색'}
+        iconSize={'size-4'}
+      />
       <IconButton Icon={SunIcon} label={'테마 변경'} />
       <IconButton
         Icon={isSidebarOpen ? XMarkIcon : Bars3Icon}
