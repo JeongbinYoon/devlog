@@ -1,9 +1,9 @@
 import { getPostDetail } from '@/lib/posts';
 
-type Props = { params: { slug: string } };
+type Params = { params: Promise<{ slug: string }> };
 
-const PostDetailPage = ({ params }: Props) => {
-  const { slug } = params;
+const PostDetailPage = async ({ params }: Params) => {
+  const { slug } = await params;
   const { content = '' } = getPostDetail(slug) || {};
   return <div>{content}</div>;
 };
