@@ -64,22 +64,29 @@ const Nav = () => {
 
   return (
     <nav className={`flex flex-col md:flex-row relative h-fit`}>
-      {menuItems.map((menu, idx) => (
-        <Link
-          key={menu.path}
-          href={menu.path}
-          className={`px-4 py-2.5 text-center transition-colors rounded-full ${
-            menu.path === pathName
-              ? `text-white ${isLoading && 'bg-black'}` // 새로고침 시 하이라이트 위치 계산 전 임시 배경으로 깜빡임 해결
-              : 'text-black'
-          }`}
-          ref={(el) => {
-            menuRefs.current[idx] = el;
-          }}
-        >
-          {menu.name}
-        </Link>
-      ))}
+      {menuItems.map((menu, idx) => {
+        const isActive =
+          (menu.path === '/' && pathName === menu.path) ||
+          (menu.path !== '/' && pathName.startsWith(menu.path));
+
+        const className = `px-4 py-2.5 text-center transition-colors rounded-full ${
+          isActive
+            ? `text-white ${isLoading && 'bg-black'}` // 새로고침 시 하이라이트 위치 계산 전 임시 배경으로 깜빡임 해결
+            : 'text-black'
+        }`;
+        return (
+          <Link
+            key={menu.path}
+            href={menu.path}
+            className={className}
+            ref={(el) => {
+              menuRefs.current[idx] = el;
+            }}
+          >
+            {menu.name}
+          </Link>
+        );
+      })}
 
       {/* 메뉴 하이라이트 */}
       <div

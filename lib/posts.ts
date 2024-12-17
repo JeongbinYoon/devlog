@@ -7,37 +7,33 @@ interface Post {
   title: string;
   date: string;
   tags: string[];
+  content: string;
 }
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
-export function getSortedPostsData() {
-  // Get file names under /posts
+export const getSortedPostsData = () => {
   const fileNames = fs.readdirSync(postsDirectory);
   const allPostsData = fileNames.map((fileName) => {
-    // Remove ".md" from file name to get id
     const id = fileName.replace(/\.md$/, '');
 
-    // Read markdown file as string
+    // 마크다운 파일 읽기
     const fullPath = path.join(postsDirectory, fileName);
     const fileContents = fs.readFileSync(fullPath, 'utf8');
 
-    // Use gray-matter to parse the post metadata section
+    // metadata 파싱
     const matterResult = matter(fileContents);
 
-    // Combine the data with the id
     return {
       id,
+      content: matterResult.content,
       ...matterResult.data,
     };
   }) as Post[];
 
-  // Sort posts by date
-  return allPostsData.sort((a, b) => {
-    if (a.date < b.date) {
-      return 1;
-    } else {
-      return -1;
-    }
-  });
-}
+  // 날짜 순 정렬
+  return allPostsData.sort((a, b) => (a.date < b.date ? 1 : -1));
+};
+
+export const getPostDetail = (id: string) =>
+  getSortedPostsData().find((item) => item.id === id);
