@@ -7,9 +7,9 @@ const BlogPage = () => {
   return (
     <>
       <ul className='flex flex-col gap-8'>
-        {allPostsData.map(({ id, title, date }) => (
+        {allPostsData.map(({ id, title, slug, date }) => (
           <li key={id}>
-            <Link href={`/blog/${id}`}>
+            <Link href={`/blog/${slug}`}>
               <p>{title}</p>
               <span>{date}</span>
             </Link>

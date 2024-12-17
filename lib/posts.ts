@@ -5,6 +5,7 @@ import matter from 'gray-matter';
 interface Post {
   id: string;
   title: string;
+  slug: string;
   date: string;
   tags: string[];
   content: string;
@@ -23,10 +24,12 @@ export const getSortedPostsData = () => {
 
     // metadata 파싱
     const matterResult = matter(fileContents);
+    const slug = matterResult.data.title.toLowerCase().replace(/\s+/g, '-');
 
     return {
       id,
       content: matterResult.content,
+      slug,
       ...matterResult.data,
     };
   }) as Post[];
@@ -35,5 +38,5 @@ export const getSortedPostsData = () => {
   return allPostsData.sort((a, b) => (a.date < b.date ? 1 : -1));
 };
 
-export const getPostDetail = (id: string) =>
-  getSortedPostsData().find((item) => item.id === id);
+export const getPostDetail = (slug: string) =>
+  getSortedPostsData().find((item) => item.slug === slug);
