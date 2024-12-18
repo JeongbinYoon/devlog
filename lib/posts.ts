@@ -1,14 +1,16 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
+import { remark } from 'remark';
+import html from 'remark-html';
 
 interface Post {
   id: string;
   title: string;
-  slug: string;
+  slug?: string;
   date: string;
   tags: string[];
-  content: string;
+  contentHtml: string;
 }
 
 const postsDirectory = path.join(process.cwd(), 'posts');
@@ -28,7 +30,7 @@ export const getSortedPostsData = () => {
 
     return {
       id,
-      content: matterResult.content,
+      contentHtml: matterResult.content,
       slug,
       ...matterResult.data,
     };
@@ -38,5 +40,35 @@ export const getSortedPostsData = () => {
   return allPostsData.sort((a, b) => (a.date < b.date ? 1 : -1));
 };
 
-export const getPostDetail = (slug: string) =>
-  getSortedPostsData().find((item) => item.slug === slug);
+export const getPostDetailBySlug = async (slug: string) => {
+  const posts = getSortedPostsData();
+  const { id = '' } = posts.find((item) => item.slug === slug) || {};
+
+  if (!id) return null;
+  return getPostDetailById(id);
+};
+
+export const getPostDetailById = async (id: string): Promise<Post> => {
+  const fullPath = path.join(postsDirectory, `${id}.md`);
+  const fileContents = fs.readFileSync(fullPath, 'utf8');
+
+  // metadata 파싱
+  const matterResult = matter(fileContents);
+  const datas = matterResult.data as {
+    title: string;
+    date: string;
+    tags: string[];
+  };
+
+  // 마크다운 to HTML
+  const processedContent = await remark()
+    .use(html)
+    .process(matterResult.content);
+  const contentHtml = processedContent.toString();
+
+  return {
+    id,
+    contentHtml,
+    ...datas,
+  };
+};
