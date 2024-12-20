@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@giscus/react": "^3.0.0",
     "@heroicons/react": "^2.2.0",
     "gray-matter": "^4.0.3",
     "jotai": "^2.10.3",

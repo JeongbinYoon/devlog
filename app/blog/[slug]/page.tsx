@@ -1,4 +1,5 @@
 import { getPostDetailBySlug, getSortedPostsData } from '@/lib/posts';
+import Comments from '@/components/Giscus';
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -19,13 +20,16 @@ const PostDetailPage = async ({ params }: Params) => {
   if (!id) return <div>글을 불러올 수 없습니다.</div>;
 
   return (
-    <div>
-      <h2 className='text-4xl mb-7'>{title}</h2>
-      <span className='to-gray-400'>{date}</span>
-      <div
-        className='mt-10'
-        dangerouslySetInnerHTML={{ __html: contentHtml }}
-      />
+    <div className='mx-5 md:mx-auto mt-12 mb-24 max-w-3xl'>
+      <div className='mb-7'>
+        <h2 className='text-4xl mb-7'>{title}</h2>
+        <span className='to-gray-400'>{date}</span>
+        <div
+          className='mt-10'
+          dangerouslySetInnerHTML={{ __html: contentHtml }}
+        />
+      </div>
+      <Comments />
     </div>
   );
 };

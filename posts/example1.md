@@ -31,5 +31,3 @@ Ut vel tristique arcu. Sed auctor tempor velit, id auctor mi convallis nec. Morb
 Lorem ipsum may seem like a trivial tool, but it serves a crucial role in the world of design and development. By using neutral text as a placeholder, designers can focus on layout and structure, allowing them to craft more effective and aesthetically pleasing compositions. Whether you're creating a website, a print layout, or a digital product, Lorem Ipsum continues to be a reliable and essential part of the creative process.
 
 Cras efficitur nunc quis purus placerat, ac pharetra magna cursus. Fusce ut ante sem. Integer ullamcorper dolor sed urna fermentum, eget fringilla arcu varius. Sed sollicitudin, dui in gravida cursus, orci enim lacinia odio, ut maximus nunc eros at neque. Mauris ut nulla euismod, feugiat tortor ut, maximus turpis.
-
----
