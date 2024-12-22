@@ -22,12 +22,11 @@ const PostDetailPage = async ({ params }: Params) => {
   return (
     <div className='mx-5 md:mx-auto mt-12 mb-24 max-w-3xl'>
       <div className='mb-7'>
-        <h2 className='text-4xl mb-7'>{title}</h2>
-        <span className='to-gray-400'>{date}</span>
-        <div
-          className='mt-10'
-          dangerouslySetInnerHTML={{ __html: contentHtml }}
-        />
+        <h2 className='text-4xl font-bold mb-5'>{title}</h2>
+        <span className='text-gray-500'>{date}</span>
+        <article className='prose md:prose-md max-w-3xl mt-10'>
+          <div dangerouslySetInnerHTML={{ __html: contentHtml }} />
+        </article>
       </div>
       <Comments />
     </div>
