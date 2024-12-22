@@ -1,5 +1,7 @@
 'use client';
 
+import { isSidebarOpenAtom } from '@/app/atoms';
+import { useSetAtom } from 'jotai';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -28,11 +30,16 @@ const Nav = () => {
   });
 
   const [isLoading, setIsLoading] = useState(true);
+  const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom);
 
   //  하이라이트 위치 계산
   const calculateHighlight = useCallback(
     (duration = 300) => {
-      const currentIdx = menuItems.findIndex((item) => item.path === pathName);
+      const currentIdx = menuItems.findIndex((item) =>
+        item.path === '/'
+          ? pathName === item.path
+          : pathName.startsWith(item.path)
+      );
       const currentMenu = menuRefs.current[currentIdx];
 
       if (currentMenu) {
@@ -51,6 +58,8 @@ const Nav = () => {
     },
     [pathName]
   );
+
+  const closeSideBar = () => setTimeout(() => setIsSidebarOpen(false), 300);
 
   useLayoutEffect(() => {
     calculateHighlight();
@@ -82,6 +91,7 @@ const Nav = () => {
             ref={(el) => {
               menuRefs.current[idx] = el;
             }}
+            onClick={closeSideBar}
           >
             {menu.name}
           </Link>
