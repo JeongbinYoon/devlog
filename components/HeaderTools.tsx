@@ -1,14 +1,14 @@
 'use client';
 
 import { ComponentType } from 'react';
+import { useAtom } from 'jotai';
+import { isSidebarOpenAtom } from '@/app/atoms';
 import {
   Bars3Icon,
   MagnifyingGlassIcon,
+  SunIcon,
   XMarkIcon,
-} from '@heroicons/react/24/solid';
-import { SunIcon } from '@heroicons/react/24/outline';
-import { useAtom } from 'jotai';
-import { isSidebarOpenAtom } from '@/app/atoms';
+} from '@/components/icons';
 
 interface ButtonType {
   Icon: ComponentType<React.SVGProps<SVGSVGElement>>;

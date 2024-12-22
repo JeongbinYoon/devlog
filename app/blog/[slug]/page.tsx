@@ -15,6 +15,8 @@ const PostDetailPage = async ({ params }: Params) => {
     title = '',
     contentHtml = '',
     date = '',
+    prevPost,
+    nextPost,
   } = (await getPostDetailBySlug(slug)) || {};
 
   if (!id) return <div>글을 불러올 수 없습니다.</div>;
@@ -28,6 +30,7 @@ const PostDetailPage = async ({ params }: Params) => {
           <div dangerouslySetInnerHTML={{ __html: contentHtml }} />
         </article>
       </div>
+      <PrevNextPosts posts={{ prevPost, nextPost }} />
       <Comments />
     </div>
   );

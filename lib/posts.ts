@@ -3,15 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
-
-interface Post {
-  id: string;
-  title: string;
-  slug?: string;
-  date: string;
-  tags: string[];
-  contentHtml: string;
-}
+import { Post } from '@/app/types/blog';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
@@ -41,10 +33,19 @@ export const getSortedPostsData = () => {
 
 export const getPostDetailBySlug = async (slug: string) => {
   const posts = getSortedPostsData();
-  const { id = '' } = posts.find((item) => item.slug === slug) || {};
+  const currentIdx = posts.findIndex((item) => item.slug === slug);
+  const { id = '' } = posts[currentIdx];
 
-  if (!id) return null;
-  return getPostDetailById(id);
+  if (currentIdx === -1) return null;
+  const prevPost = posts[currentIdx + 1] || null;
+  const nextPost = posts[currentIdx - 1] || null;
+  const postInfoDetail = await getPostDetailById(id);
+
+  return {
+    ...postInfoDetail,
+    prevPost,
+    nextPost,
+  };
 };
 
 export const getPostDetailById = async (id: string): Promise<Post> => {
