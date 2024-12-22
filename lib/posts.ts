@@ -34,7 +34,7 @@ export const getSortedPostsData = () => {
 export const getPostDetailBySlug = async (slug: string) => {
   const posts = getSortedPostsData();
   const currentIdx = posts.findIndex((item) => item.slug === slug);
-  const { id = '' } = posts[currentIdx];
+  const { id = '' } = posts[currentIdx] || {};
 
   if (currentIdx === -1) return null;
   const prevPost = posts[currentIdx + 1] || null;
