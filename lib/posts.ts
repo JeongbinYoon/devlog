@@ -30,7 +30,6 @@ export const getSortedPostsData = () => {
 
     return {
       id,
-      contentHtml: matterResult.content,
       slug,
       ...matterResult.data,
     };
@@ -61,14 +60,16 @@ export const getPostDetailById = async (id: string): Promise<Post> => {
   };
 
   // 마크다운 to HTML
-  const processedContent = await remark()
-    .use(html)
-    .process(matterResult.content);
-  const contentHtml = processedContent.toString();
+  const contentHtml = await parseData(matterResult.content);
 
   return {
     id,
     contentHtml,
     ...datas,
   };
+};
+
+const parseData = async (htmlContent: string) => {
+  const parsed = await remark().use(html).process(htmlContent);
+  return parsed.toString();
 };
