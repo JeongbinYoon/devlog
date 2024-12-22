@@ -1,7 +1,6 @@
 'use client';
 
-import HeaderTools from '@/components/HeaderTools';
-import Nav from '@/components/Nav';
+import { HeaderTools, Nav } from '@/components';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 

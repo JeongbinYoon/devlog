@@ -2,7 +2,7 @@
 
 import { useAtomValue } from 'jotai';
 import { isSidebarOpenAtom } from '@/app/atoms';
-import Nav from '@/components/Nav';
+import { Nav } from '@/components';
 import { useState, useEffect } from 'react';
 
 const SideBar = () => {

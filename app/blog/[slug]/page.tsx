@@ -1,5 +1,5 @@
 import { getPostDetailBySlug, getSortedPostsData } from '@/lib/posts';
-import Comments from '@/components/Giscus';
+import { Comments, PrevNextPosts } from '@/components';
 
 type Params = { params: Promise<{ slug: string }> };
 
