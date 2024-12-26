@@ -14,14 +14,14 @@ export default {
       },
       keyframes: {
         waveAnimation: {
-          from: { transform: 'rotate(0deg)' },
-          to: { transform: 'rotate(360deg)' },
+          from: { transform: 'translate(-50%, 100%) rotate(0deg)' },
+          to: { transform: 'translate(-50%, 100%) rotate(360deg)' },
         },
       },
       animation: {
-        wave: 'waveAnimation 10s infinite linear',
-        waveSlow: 'waveAnimation 13.5s infinite linear',
-        waveMedium: 'waveAnimation 11s infinite linear',
+        wave: 'waveAnimation 5s infinite linear',
+        waveSlow: 'waveAnimation 7s infinite linear',
+        waveMedium: 'waveAnimation 9s infinite linear',
       },
     },
   },
