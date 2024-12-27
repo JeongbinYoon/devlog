@@ -5,7 +5,7 @@ const BlogPage = () => {
   const allPostsData = getSortedPostsData();
 
   return (
-    <div className='max-w-3xl mx-auto mt-12'>
+    <div className='max-w-3xl mx-auto mt-12 px-5 md:px-0'>
       <ul className='flex flex-col gap-8'>
         {allPostsData.map(({ id, title, slug, date }) => (
           <li key={id}>

@@ -30,6 +30,7 @@ const Nav = () => {
   });
 
   const [isLoading, setIsLoading] = useState(true);
+  const [targetPath, setTargetPath] = useState('');
   const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom);
 
   //  하이라이트 위치 계산
@@ -37,8 +38,8 @@ const Nav = () => {
     (duration = 300) => {
       const currentIdx = menuItems.findIndex((item) =>
         item.path === '/'
-          ? pathName === item.path
-          : pathName.startsWith(item.path)
+          ? (targetPath || pathName) === item.path
+          : (targetPath || pathName).startsWith(item.path)
       );
       const currentMenu = menuRefs.current[currentIdx];
 
@@ -56,10 +57,15 @@ const Nav = () => {
         setIsLoading(false);
       }
     },
-    [pathName]
+    [pathName, targetPath]
   );
 
   const closeSideBar = () => setTimeout(() => setIsSidebarOpen(false), 300);
+
+  const onFocusTarget = (targetPath: string) => {
+    setTargetPath(targetPath);
+    calculateHighlight(300);
+  };
 
   useLayoutEffect(() => {
     calculateHighlight();
@@ -75,8 +81,8 @@ const Nav = () => {
     <nav className={`flex flex-col md:flex-row relative h-fit`}>
       {menuItems.map((menu, idx) => {
         const isActive =
-          (menu.path === '/' && pathName === menu.path) ||
-          (menu.path !== '/' && pathName.startsWith(menu.path));
+          (menu.path === '/' && (targetPath || pathName) === menu.path) ||
+          (menu.path !== '/' && (targetPath || pathName).startsWith(menu.path));
 
         const className = `px-4 py-2.5 text-center transition-colors rounded-full ${
           isActive
@@ -92,6 +98,8 @@ const Nav = () => {
               menuRefs.current[idx] = el;
             }}
             onClick={closeSideBar}
+            onMouseOver={() => onFocusTarget(menu.path)}
+            onMouseOut={() => setTargetPath('')}
           >
             {menu.name}
           </Link>
