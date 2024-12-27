@@ -1,6 +1,6 @@
 const Likes = () => {
   return (
-    <div className='hidden md:block fixed right-[100px] top-1/2 w-[60px] h-fit'>
+    <div className='hidden md:block w-[60px] h-fit translate-x-24'>
       {/* 하트 이미지 */}
       <div
         style={{
