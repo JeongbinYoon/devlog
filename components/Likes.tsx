@@ -1,5 +1,7 @@
 'use client';
-import { useEffect, useId, useRef, useState } from 'react';
+import { isShakeAtom, likeClickCountAtom } from '@/app/atoms';
+import { useAtom, useAtomValue } from 'jotai';
+import { useEffect, useId, useRef } from 'react';
 
 const HeartSVG = ({ uniqueId }: { uniqueId: string }) => {
   return (
@@ -78,8 +80,10 @@ const Heart = () => {
   ];
 
   const uniqueId = useId();
-  const [clickCount, setClickCount] = useState(0);
   const MAX_CLICK_COUNT = 10;
+  const [clickCount, setClickCount] = useAtom(likeClickCountAtom);
+  const [isShake, setIsShake] = useAtom(isShakeAtom);
+  const shakeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const waveRefs = useRef<(HTMLDivElement | null)[]>([]);
   const rotationRefs = useRef<number[]>(waves.map(() => 0)); // 각 웨이브의 회전 값 유지
@@ -96,10 +100,14 @@ const Heart = () => {
     waveRefs.current.forEach((wave, idx) => {
       const rotate = () => {
         if (wave) {
+          const rotateAmount = rotationRefs.current[idx] + (isShake ? 2 : 0);
+          const scaleAmount = !isShake ? 3 : 3.5;
           rotationRefs.current[idx] += (idx + 1) * 0.3;
-          wave.style.transform = `translate(-50%, 30%) rotate(${
-            rotationRefs.current[idx]
-          }deg) scale(${(clickCount + 3) / 2.3})`;
+          wave.style.transform = `translate(-50%, 30%) rotate(${rotateAmount}deg) scale(${
+            (clickCount + scaleAmount) / 2.3
+          })`;
+
+          wave.style.borderRadius = isShake ? '35%' : '40%';
         }
         animationIds[idx] = requestAnimationFrame(rotate);
       };
@@ -112,15 +120,42 @@ const Heart = () => {
     return () => {
       animationIds.forEach((id) => cancelAnimationFrame(id));
     };
-  }, [clickCount]);
+  }, [clickCount, isShake]);
+
+  // 흔들기
+  const onFocusHeart = () => {
+    setIsShake(true);
+
+    // 이전 타이머가 있다면 취소
+    // 여러 번 마우스 over-out 케이스
+    if (shakeTimeoutRef.current) clearTimeout(shakeTimeoutRef.current);
+
+    // 새로운 타이머 시작
+    shakeTimeoutRef.current = setTimeout(() => {
+      setIsShake(false);
+      shakeTimeoutRef.current = null;
+    }, 3000);
+  };
+
+  const onMouseLeave = () => {
+    setIsShake(false);
+    // 마우스 아웃 시 타이머 즉시 취소
+    if (shakeTimeoutRef.current) {
+      clearTimeout(shakeTimeoutRef.current);
+      shakeTimeoutRef.current = null;
+    }
+  };
 
   return (
     <div
       onClick={handleClickHeart}
+      onMouseEnter={onFocusHeart}
+      onMouseLeave={onMouseLeave}
       style={{
         clipPath: `url(#heartClip-${uniqueId})`,
         WebkitClipPath: `url(#heartClip-${uniqueId})`,
       }}
+      className='hover:scale-110 transition-transform'
     >
       <div className='relative cursor-pointer'>
         <HeartSVG uniqueId={uniqueId} />
@@ -132,7 +167,7 @@ const Heart = () => {
             ref={(el) => {
               waveRefs.current[i] = el;
             }}
-            className={`absolute top-full left-1/2 -translate-x-1/2 duration-150 w-[30px] h-[30px] rounded-[40%] bg-[#e41010] ${item.opacity}`}
+            className={`absolute top-full left-1/2 -translate-x-1/2 duration-150 w-[30px] h-[30px] bg-[#e41010] ${item.opacity}`}
           ></div>
         ))}
       </div>
@@ -141,6 +176,8 @@ const Heart = () => {
 };
 
 const Likes = () => {
+  const clickCount = useAtomValue(likeClickCountAtom);
+
   return (
     <div className='flex justify-center items-center w-full py-10 bg-stone-50 lg:bg-transparent lg:w-[60px] lg:ml-24'>
       <div className='flex flex-col items-center'>
@@ -148,7 +185,7 @@ const Likes = () => {
         <div className='flex flex-col'>
           <Heart />
           <div className='text-[#e41010] mt-2'>
-            <p className='text-center text-2xl font-bold'>100</p>
+            <p className='text-center text-2xl font-bold'>{clickCount}</p>
           </div>
         </div>
       </div>
