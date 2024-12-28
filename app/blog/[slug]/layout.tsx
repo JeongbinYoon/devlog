@@ -6,9 +6,9 @@ export default function BlogLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className='flex justify-center'>
+    <div>
       {children}
-      <aside className='sticky h-screen top-0 flex flex-col justify-center'>
+      <aside className='fixed top-1/2 right-0 -translate-y-1/2 w-[calc((100vw-768px)/2)] lg:block hidden'>
         <Likes />
       </aside>
     </div>

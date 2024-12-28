@@ -1,5 +1,5 @@
 import { getPostDetailBySlug, getSortedPostsData } from '@/lib/posts';
-import { Comments, PrevNextPosts } from '@/components';
+import { Comments, Likes, PrevNextPosts } from '@/components';
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -30,6 +30,9 @@ const PostDetailPage = async ({ params }: Params) => {
           <section className='prose md:prose-md max-w-3xl mt-10'>
             <div dangerouslySetInnerHTML={{ __html: contentHtml }} />
           </section>
+        </div>
+        <div className='lg:hidden block'>
+          <Likes />
         </div>
         <PrevNextPosts posts={{ prevPost, nextPost }} />
         <Comments />
