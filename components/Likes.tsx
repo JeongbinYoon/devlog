@@ -89,6 +89,7 @@ const Heart = () => {
   const rotationRefs = useRef<number[]>(waves.map(() => 0)); // 각 웨이브의 회전 값 유지
 
   const handleClickHeart = () => {
+    onFocusHeart();
     if (clickCount >= MAX_CLICK_COUNT) return;
     setClickCount((prev) => prev + 1);
   };
@@ -101,13 +102,13 @@ const Heart = () => {
       const rotate = () => {
         if (wave) {
           const rotateAmount = rotationRefs.current[idx] + (isShake ? 2 : 0);
-          const scaleAmount = !isShake ? 3 : 3.5;
+          const scaleAmount = !isShake ? 3 : 3.2;
           rotationRefs.current[idx] += (idx + 1) * 0.3;
           wave.style.transform = `translate(-50%, 30%) rotate(${rotateAmount}deg) scale(${
             (clickCount + scaleAmount) / 2.3
           })`;
 
-          wave.style.borderRadius = isShake ? '35%' : '40%';
+          wave.style.borderRadius = isShake ? '30%' : '40%';
         }
         animationIds[idx] = requestAnimationFrame(rotate);
       };
@@ -134,7 +135,7 @@ const Heart = () => {
     shakeTimeoutRef.current = setTimeout(() => {
       setIsShake(false);
       shakeTimeoutRef.current = null;
-    }, 3000);
+    }, 1000);
   };
 
   const onMouseLeave = () => {
@@ -159,6 +160,8 @@ const Heart = () => {
     >
       <div className='relative cursor-pointer'>
         <HeartSVG uniqueId={uniqueId} />
+        {/* 광택 (물결 상위 위치) */}
+        <div className='absolute -top-2 z-10 w-full h-6 bg-gradient-to-b from-gray-100 to-transparent'></div>
 
         {/* 물결 애니메이션 */}
         {waves.map((item, i) => (
@@ -167,7 +170,7 @@ const Heart = () => {
             ref={(el) => {
               waveRefs.current[i] = el;
             }}
-            className={`absolute top-full left-1/2 -translate-x-1/2 duration-150 w-[30px] h-[30px] bg-[#e41010] ${item.opacity}`}
+            className={`absolute top-full left-1/2 -translate-x-1/2 duration-500 w-[30px] h-[30px] bg-[#e41010] ${item.opacity}`}
           ></div>
         ))}
       </div>
