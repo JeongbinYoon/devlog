@@ -1,7 +1,12 @@
 'use client';
-import { isShakeAtom, likeClickCountAtom } from '@/app/atoms';
-import { useAtom, useAtomValue } from 'jotai';
+import {
+  floatingTextsAtom,
+  isShakeAtom,
+  likeClickCountAtom,
+} from '@/app/atoms';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useId, useRef } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 const HeartSVG = ({ uniqueId }: { uniqueId: string }) => {
   return (
@@ -82,6 +87,7 @@ const Heart = () => {
   const uniqueId = useId();
   const MAX_CLICK_COUNT = 10;
   const [clickCount, setClickCount] = useAtom(likeClickCountAtom);
+  const setFloatingTexts = useSetAtom(floatingTextsAtom);
   const [isShake, setIsShake] = useAtom(isShakeAtom);
   const shakeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -92,6 +98,15 @@ const Heart = () => {
     onFocusHeart();
     if (clickCount >= MAX_CLICK_COUNT) return;
     setClickCount((prev) => prev + 1);
+
+    // 새로운 +1 텍스트 추가
+    const id = uuidv4();
+    setFloatingTexts((prev) => [...prev, id]);
+
+    // 일정 시간 후 제거
+    setTimeout(() => {
+      setFloatingTexts((prev) => prev.filter((item) => item !== id));
+    }, 500);
   };
 
   // 물결 및 차오름 애니메이션 구현
@@ -180,14 +195,24 @@ const Heart = () => {
 
 const Likes = () => {
   const clickCount = useAtomValue(likeClickCountAtom);
-
+  const floatingTexts = useAtomValue(floatingTextsAtom);
+  console.log('floatingTexts', floatingTexts);
   return (
     <div className='flex justify-center items-center w-full py-10 bg-stone-50 lg:bg-transparent lg:w-[60px] lg:ml-24'>
       <div className='flex flex-col items-center'>
         <p className='lg:hidden font-bold mb-4'>글이 마음에 드셨나요?</p>
         <div className='flex flex-col'>
           <Heart />
-          <div className='text-[#e41010] mt-2'>
+          <div className='relative text-[#e41010] mt-2'>
+            {floatingTexts.map((id) => (
+              <span
+                key={id}
+                className='absolute -right-2 font-bold animate-floatUp'
+              >
+                +1
+              </span>
+            ))}
+
             <p className='text-center text-2xl font-bold'>{clickCount}</p>
           </div>
         </div>
