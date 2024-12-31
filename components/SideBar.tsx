@@ -36,7 +36,7 @@ const SideBar = () => {
 
   return (
     <div
-      className={`block md:hidden absolute w-full px-5 py-8 bg-stone-100 transition-transform duration-300 ${
+      className={`block md:hidden absolute z-40 w-full px-5 py-8 bg-stone-100 transition-transform duration-300 ${
         isAnimating ? 'translate-x-0' : 'translate-x-full'
       }`}
       style={{
