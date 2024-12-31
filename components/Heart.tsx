@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useRef } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useAtom, useSetAtom } from 'jotai';
 import {
@@ -22,25 +22,38 @@ const Heart = () => {
   const [clickCount, setClickCount] = useAtom(likeClickCountAtom);
   const setFloatingTexts = useSetAtom(floatingTextsAtom);
   const [isShake, setIsShake] = useAtom(isShakeAtom);
+  const [startMaxEffect, setStartMaxEffect] = useState(false);
+  const [startSecondMaxEffect, setStartSecondMaxEffect] = useState(false);
   const shakeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const waveRefs = useRef<(HTMLDivElement | null)[]>([]);
   const rotationRefs = useRef<number[]>(waves.map(() => 0)); // 각 웨이브의 회전 값 유지
 
   const handleClickHeart = () => {
+    setClickCount((prev) => {
+      const newCount = prev + 1;
+      if (newCount > MAX_CLICK_COUNT) return prev;
+
+      // 새로운 +1 텍스트 추가
+      const id = uuidv4();
+      setFloatingTexts((prev) => [...prev, id]);
+
+      // 일정 시간 후 제거
+      setTimeout(() => {
+        setFloatingTexts((prev) => prev.filter((item) => item !== id));
+      }, 500);
+      return newCount;
+    });
+
     onFocusHeart();
-    if (clickCount >= MAX_CLICK_COUNT) return;
-    setClickCount((prev) => prev + 1);
-
-    // 새로운 +1 텍스트 추가
-    const id = uuidv4();
-    setFloatingTexts((prev) => [...prev, id]);
-
-    // 일정 시간 후 제거
-    setTimeout(() => {
-      setFloatingTexts((prev) => prev.filter((item) => item !== id));
-    }, 500);
   };
+
+  // Max 효과
+  useEffect(() => {
+    if (clickCount === MAX_CLICK_COUNT) {
+      onMaxEffect();
+    }
+  }, [clickCount]);
 
   // 물결 및 차오름 애니메이션 구현
   useEffect(() => {
@@ -95,18 +108,51 @@ const Heart = () => {
     }
   };
 
+  const onMaxEffect = () => {
+    setStartMaxEffect(true);
+    setStartMaxEffect(true);
+    setTimeout(() => {
+      setStartMaxEffect(false);
+      setStartSecondMaxEffect(true);
+    }, 1000);
+    setTimeout(() => setStartSecondMaxEffect(false), 3000);
+  };
+
   return (
     <div
       onClick={handleClickHeart}
       onMouseEnter={onFocusHeart}
       onMouseLeave={onMouseLeave}
-      style={{
-        clipPath: `url(#heartClip-${uniqueId})`,
-        WebkitClipPath: `url(#heartClip-${uniqueId})`,
-      }}
-      className='hover:scale-110 transition-transform'
+      className='relative'
     >
-      <div className='relative cursor-pointer'>
+      {/* Max 시 모션 */}
+      {clickCount > 9 && (
+        <>
+          <div
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full w-4 h-4 bg-purple-300 transition-transform duration-1000 opacity-20 ${
+              startMaxEffect && 'scale-[8]'
+            }`}
+          ></div>
+          <div
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full w-3.5 h-3.5 bg-red-500 transition-transform duration-1000 delay-150 opacity-20 ${
+              startMaxEffect && 'scale-[9]'
+            }`}
+          ></div>
+          <div
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full w-3.5 h-3.5 bg-white transition-transform duration-1000 ${
+              startSecondMaxEffect && 'scale-[10]'
+            }`}
+          ></div>
+        </>
+      )}
+
+      <div
+        className='relative cursor-pointer hover:scale-110 transition-transform'
+        style={{
+          clipPath: `url(#heartClip-${uniqueId})`,
+          WebkitClipPath: `url(#heartClip-${uniqueId})`,
+        }}
+      >
         <HeartSVG uniqueId={uniqueId} />
 
         {/* 광택 (물결 상위 위치) */}
