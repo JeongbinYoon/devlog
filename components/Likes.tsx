@@ -7,9 +7,9 @@ const Likes = () => {
   const clickCount = useAtomValue(likeClickCountAtom);
   const floatingTexts = useAtomValue(floatingTextsAtom);
   return (
-    <div className='flex justify-center items-center w-full py-10 bg-stone-50 lg:bg-transparent lg:w-[60px] lg:ml-24'>
+    <div className='flex justify-center items-center w-full py-10 lg:w-[60px] lg:ml-24'>
       <div className='flex flex-col items-center'>
-        <p className='lg:hidden font-bold mb-4'>글이 마음에 드셨나요?</p>
+        <p className='lg:hidden font-bold mb-4 z-10'>글이 마음에 드셨나요?</p>
         <div className='flex flex-col'>
           <Heart />
           <div className='relative text-[#e41010] mt-2'>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useAtom, useSetAtom } from 'jotai';
 import {
@@ -19,11 +19,14 @@ const Heart = () => {
 
   const uniqueId = useId();
   const MAX_CLICK_COUNT = 10;
+  const MAX_BUBBLE_COUNT = 14;
   const [clickCount, setClickCount] = useAtom(likeClickCountAtom);
   const setFloatingTexts = useSetAtom(floatingTextsAtom);
   const [isShake, setIsShake] = useAtom(isShakeAtom);
+  const [bubbles, setBubbles] = useState([{ x: 0, y: 0 }]);
   const [startMaxEffect, setStartMaxEffect] = useState(false);
   const [startSecondMaxEffect, setStartSecondMaxEffect] = useState(false);
+  const [floatBubbles, setFloatBubbles] = useState(false);
   const shakeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const waveRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -48,12 +51,23 @@ const Heart = () => {
     onFocusHeart();
   };
 
+  const onMaxEffect = useCallback(() => {
+    setStartMaxEffect(true); // 첫 번째 원 효과
+    setStartMaxEffect(true); // 두 번째 원 효과
+    setTimeout(() => {
+      // 클릭 수 Max 효과
+      setStartMaxEffect(false);
+      setStartSecondMaxEffect(true);
+    }, 1000);
+    setTimeout(() => setStartSecondMaxEffect(false), 3000);
+
+    onStartBubbleEffect();
+  }, []);
+
   // Max 효과
   useEffect(() => {
-    if (clickCount === MAX_CLICK_COUNT) {
-      onMaxEffect();
-    }
-  }, [clickCount]);
+    if (clickCount === MAX_CLICK_COUNT) onMaxEffect();
+  }, [clickCount, onMaxEffect]);
 
   // 물결 및 차오름 애니메이션 구현
   useEffect(() => {
@@ -108,15 +122,33 @@ const Heart = () => {
     }
   };
 
-  const onMaxEffect = () => {
-    setStartMaxEffect(true);
-    setStartMaxEffect(true);
-    setTimeout(() => {
-      setStartMaxEffect(false);
-      setStartSecondMaxEffect(true);
-    }, 1000);
-    setTimeout(() => setStartSecondMaxEffect(false), 3000);
+  const onStartBubbleEffect = () => {
+    const angleStep = (Math.PI * 2) / MAX_BUBBLE_COUNT;
+
+    setBubbles((prev) =>
+      prev.map((_, idx) => {
+        // 두 개씩 가깝게 위치하면서 약간의 랜덤값 추가
+        const angle =
+          idx % 2 === 0
+            ? angleStep * idx - angleStep / MAX_BUBBLE_COUNT
+            : angleStep * idx;
+        const x = (Math.cos(angle) + Math.random() * 0.1) * 50;
+        const y = (Math.sin(angle) + Math.random() * 0.1) * 50;
+
+        return { x, y };
+      })
+    );
+    setTimeout(() => setFloatBubbles(true), 1200);
   };
+
+  useEffect(() => {
+    // 버블 개수, 위치 초기화
+    setBubbles(
+      Array.from({ length: MAX_BUBBLE_COUNT }).map(() => {
+        return { x: 0, y: 0 };
+      })
+    );
+  }, []);
 
   return (
     <div
@@ -129,20 +161,39 @@ const Heart = () => {
       {clickCount > 9 && (
         <>
           <div
-            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full w-4 h-4 bg-purple-300 transition-transform duration-1000 opacity-20 ${
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full size-4 bg-purple-300 transition-transform duration-1000 opacity-20 ${
               startMaxEffect && 'scale-[8]'
             }`}
           ></div>
           <div
-            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full w-3.5 h-3.5 bg-red-500 transition-transform duration-1000 delay-150 opacity-20 ${
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full size-3.5 bg-red-500 transition-transform duration-1000 delay-150 opacity-20 ${
               startMaxEffect && 'scale-[9]'
             }`}
           ></div>
           <div
-            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full w-3.5 h-3.5 bg-white transition-transform duration-1000 ${
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full size-3.5 bg-white transition-transform duration-1000 ${
               startSecondMaxEffect && 'scale-[10]'
             }`}
           ></div>
+
+          {/* 버블 효과 */}
+          <div
+            className={`absolute top-1/2 left-1/2 transition duration-500 delay-100 ${
+              floatBubbles && '-translate-y-2 opacity-0'
+            }`}
+          >
+            {bubbles.map((el, idx) => (
+              <div
+                key={idx}
+                className={`absolute top-1/2 left-1/2 transition-transform delay-[1200ms] size-1.5 rounded-full ${
+                  idx % 2 === 0 ? 'bg-red-500' : 'bg-purple-500'
+                } opacity-40 ${floatBubbles && 'opacity-0'}`}
+                style={{
+                  transform: `translate(-50%, -50%) translate(${el.x}px, ${el.y}px)`,
+                }}
+              ></div>
+            ))}
+          </div>
         </>
       )}
 
