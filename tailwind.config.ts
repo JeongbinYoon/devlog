@@ -19,9 +19,14 @@ export default {
           '50%': { opacity: '1' },
           '100%': { opacity: '0', transform: 'translateY(-20px)' },
         },
+        fadeIn: {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
       },
       animation: {
         floatUp: 'floatUp .6s ease-out',
+        'fade-in': 'fadeIn .2s ease-out',
       },
     },
   },

@@ -8,7 +8,7 @@ export default function BlogLayout({
   return (
     <div>
       {children}
-      <aside className='fixed top-1/2 right-0 -translate-y-1/2 w-[calc((100vw-768px)/2)] lg:block hidden'>
+      <aside className='fixed top-1/2 right-0 -translate-y-12 w-[calc((100vw-768px)/2)] lg:block hidden'>
         <Likes />
       </aside>
     </div>

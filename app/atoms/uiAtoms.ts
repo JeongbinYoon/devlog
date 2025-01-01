@@ -4,5 +4,6 @@ export const isSidebarOpenAtom = atom(false);
 
 // 좋아요
 export const likeClickCountAtom = atom(0);
+export const isMaxLikeAttemptAtom = atom(false);
 export const floatingTextsAtom = atom<string[]>([]);
 export const isShakeAtom = atom(false);
