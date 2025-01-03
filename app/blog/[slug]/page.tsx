@@ -17,7 +17,7 @@ const PostDetailPage = async ({ params }: Params) => {
     date = '',
     prevPost,
     nextPost,
-  } = (await getPostDetailBySlug(slug)) || {};
+  } = (await getPostDetailBySlug(decodeURIComponent(slug))) || {};
 
   if (!id) return <div>글을 불러올 수 없습니다.</div>;
 
