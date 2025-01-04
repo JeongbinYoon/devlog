@@ -4,6 +4,8 @@ import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
 import { Post } from '@/app/types/blog';
+import { rehype } from 'rehype';
+import rehypePrism from 'rehype-prism-plus';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
@@ -61,7 +63,7 @@ export const getPostDetailById = async (id: string): Promise<Post> => {
   };
 
   // 마크다운 to HTML
-  const contentHtml = await parseData(matterResult.content);
+  const contentHtml = await parseMarkdownToHtml(matterResult.content);
 
   return {
     id,
@@ -70,7 +72,13 @@ export const getPostDetailById = async (id: string): Promise<Post> => {
   };
 };
 
-const parseData = async (htmlContent: string) => {
-  const parsed = await remark().use(html).process(htmlContent);
-  return parsed.toString();
+const parseMarkdownToHtml = async (htmlContent: string) => {
+  const processedContent = await remark().use(html).process(htmlContent);
+
+  const highlightedContent = await rehype()
+    .data('settings', { fragment: true }) // HTML 처리 설정
+    .use(rehypePrism) // 코드 하이라이트 추가
+    .process(processedContent.toString());
+
+  return highlightedContent.toString();
 };
