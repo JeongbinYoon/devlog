@@ -76,12 +76,14 @@ export const getPostDetailById = async (id: string): Promise<Post> => {
 };
 
 const parseMarkdownToHtml = async (markdownContent: string) => {
+  // 1. Markdown -> HTML 변환
   const processedContent = await remark()
-    .use(remarkGfm)
-    .use(remarkToc, { heading: '목차' })
+    .use(remarkGfm) // GitHub Flavored Markdown 지원
+    .use(remarkToc, { heading: '목차' }) // 목차 생성
     .use(html)
     .process(markdownContent);
 
+  // 2. HTML 변환된 내용에 슬러그와 코드 하이라이트 추가
   const highlightedContent = await rehype()
     .use(rehypeSlug) // 헤더에 고유 id 추가
     .use(rehypePrism) // 코드 하이라이트 추가
