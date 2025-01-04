@@ -72,11 +72,10 @@ export const getPostDetailById = async (id: string): Promise<Post> => {
   };
 };
 
-const parseMarkdownToHtml = async (htmlContent: string) => {
-  const processedContent = await remark().use(html).process(htmlContent);
+const parseMarkdownToHtml = async (markdownContent: string) => {
+  const processedContent = await remark().use(html).process(markdownContent);
 
   const highlightedContent = await rehype()
-    .data('settings', { fragment: true }) // HTML 처리 설정
     .use(rehypePrism) // 코드 하이라이트 추가
     .process(processedContent.toString());
 
