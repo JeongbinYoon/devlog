@@ -6,6 +6,7 @@ import html from 'remark-html';
 import { Post } from '@/app/types/blog';
 import { rehype } from 'rehype';
 import rehypePrism from 'rehype-prism-plus';
+import remarkGfm from 'remark-gfm';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
@@ -73,7 +74,10 @@ export const getPostDetailById = async (id: string): Promise<Post> => {
 };
 
 const parseMarkdownToHtml = async (markdownContent: string) => {
-  const processedContent = await remark().use(html).process(markdownContent);
+  const processedContent = await remark()
+    .use(remarkGfm)
+    .use(html)
+    .process(markdownContent);
 
   const highlightedContent = await rehype()
     .use(rehypePrism) // 코드 하이라이트 추가
