@@ -95,7 +95,7 @@ Vue의 경우 `v-html`을 사용할 수 있고, React라면 `dangerouslySetInner
 
 결과는 다음과 같다.  
 제목만 보이고 콘텐츠는 아무것도 보이지 않는다. 개발자 도구에서 봐도 아무것도 없는 것을 볼 수 있다.  
-![](/images/xss/stored-result.jpg)
+![](/images/xss/stored-result1.jpg)
 ![](/images/xss/stored-element.jpg)
 
 innerHTML은 code injection과 같은 경우를 방지하기 위해 script태그가 실행되지 않는다.  

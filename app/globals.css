@@ -14,9 +14,9 @@
     --foreground: #ededed;
   }
 } */
-html {
+/* html {
   scroll-behavior: smooth;
-}
+} */
 body {
   color: var(--foreground);
   background: var(--background);
@@ -28,7 +28,6 @@ code {
   background-color: #fff2e2;
   padding: 0.2em 0.4em;
   border-radius: 4px;
-  font-size: 0.95em;
 }
 .prose
   :where(code):not(
@@ -50,4 +49,21 @@ h4,
 h5,
 h6 {
   scroll-margin-top: 80px; /* 고정된 헤더 높이만큼 여백 */
+}
+a {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+th[align='left'],
+td[align='left'] {
+  text-align: left;
+}
+th[align='center'],
+td[align='center'] {
+  text-align: center;
+}
+th[align='right'],
+td[align='right'] {
+  text-align: right;
 }
