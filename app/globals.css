@@ -14,7 +14,9 @@
     --foreground: #ededed;
   }
 } */
-
+html {
+  scroll-behavior: smooth;
+}
 body {
   color: var(--foreground);
   background: var(--background);
@@ -39,4 +41,13 @@ code {
     :where([class~='not-prose'], [class~='not-prose'] *)
   )::after {
   content: '';
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  scroll-margin-top: 80px; /* 고정된 헤더 높이만큼 여백 */
 }
