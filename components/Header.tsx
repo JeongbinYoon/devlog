@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 const Header = () => {
   return (
-    <header className={`sticky top-0 z-50 backdrop-blur-lg`}>
+    <header className={`sticky top-0 z-50 backdrop-blur-lg bg-white/70`}>
       <div className='flex justify-between items-center max-w-3xl h-16 mx-auto px-5 md:px-0'>
         <h1>
           <Link href={'/'}>LOGO</Link>
