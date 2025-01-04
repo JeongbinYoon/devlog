@@ -6,6 +6,7 @@ import HeartSVG from './HeartSVG';
 import Likes from './Likes';
 import Nav from './Nav';
 import PrevNextPosts from './PrevNextPosts';
+import ProgressBar from './ProgressBar';
 import SideBar from './SideBar';
 
 export {
@@ -17,5 +18,6 @@ export {
   Likes,
   Nav,
   PrevNextPosts,
+  ProgressBar,
   SideBar,
 };

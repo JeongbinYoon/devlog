@@ -4,9 +4,9 @@ import { useAtomValue } from 'jotai';
 import { isSidebarOpenAtom } from '@/app/atoms';
 import { Nav } from '@/components';
 import { useState, useEffect } from 'react';
+import { HEADER_HEIGHT } from '@/app/constants';
 
 const SideBar = () => {
-  const HEADER_HEIGHT = 64;
   const isSidebarOpen = useAtomValue(isSidebarOpenAtom);
   const [shouldRender, setShouldRender] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -29,7 +29,7 @@ const SideBar = () => {
     const handleScroll = () => setScrollValue(window.scrollY);
 
     window.addEventListener('scroll', handleScroll);
-    return window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   if (!shouldRender) return null;
