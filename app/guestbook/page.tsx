@@ -72,10 +72,63 @@ function Desk() {
       ))}
       {leg2Positions.map((position, index) => (
         <mesh position={position} key={index}>
-          <boxGeometry args={[0.3, 0.3, leg2Width]} />
+          <boxGeometry args={[0.3, 0.2, leg2Width]} />
           <meshStandardMaterial color='white' />
         </mesh>
       ))}
+    </>
+  );
+}
+function Monitor1() {
+  const monitorPosition: [number, number, number] = [-2.35, 2.5, -0.5]; // 모니터 위치
+  const monitorWidth = 3;
+  const monitorHeigtht = 1.6875;
+
+  return (
+    <>
+      {/*  모니터 */}
+      <mesh
+        position={monitorPosition}
+        rotation={[Math.PI / 30, Math.PI / 10, Math.PI / 2]}
+      >
+        <boxGeometry args={[monitorWidth, monitorHeigtht, 0.1]} />
+        <meshStandardMaterial color='white' />
+      </mesh>
+    </>
+  );
+}
+function Monitor2() {
+  const monitorPosition: [number, number, number] = [0, 2.5, -1]; // 모니터 위치
+  const monitorWidth = 3;
+  const monitorHeigtht = 1.6875;
+
+  return (
+    <>
+      {/*  모니터 */}
+      <mesh position={monitorPosition} rotation={[Math.PI / 40, 0, 0]}>
+        <boxGeometry args={[monitorWidth, monitorHeigtht, 0.1]} />
+        <meshStandardMaterial color='white' />
+      </mesh>
+    </>
+  );
+}
+function Monitor3() {
+  const monitor1Position: [number, number, number] = [2.4, 2.2, 0 - 1]; // 모니터 위치
+  const monitor2Position: [number, number, number] = [2.4, 1.5, -0.6]; // 모니터 위치
+  const monitorWidth = 1.6;
+  const monitorHeigtht = 0.9;
+
+  return (
+    <>
+      {/*  모니터 */}
+      <mesh position={monitor1Position}>
+        <boxGeometry args={[monitorWidth, monitorHeigtht, 0.1]} />
+        <meshStandardMaterial color='white' />
+      </mesh>
+      <mesh position={monitor2Position} rotation={[-Math.PI / 3, 0, 0]}>
+        <boxGeometry args={[monitorWidth, monitorHeigtht, 0.1]} />
+        <meshStandardMaterial color='white' />
+      </mesh>
     </>
   );
 }
@@ -84,14 +137,18 @@ function Scene() {
   return (
     <Canvas>
       {/* 라이트 */}
-      <ambientLight intensity={Math.PI / 2} />
-      <pointLight position={[10, 10, 10]} />
+      <ambientLight intensity={0.3} />
+      <directionalLight position={[10, 10, 10]} intensity={0.8} castShadow />
       {/* Room */}
       <Wall position={[0, 1.65, -4.85]} rotation={[0, 0, 0]} />
       <Wall position={[-4.85, 1.65, 0]} rotation={[0, Math.PI / 2, 0]} />
       <Floor />
       {/* Desk */}
       <Desk />
+      {/* Monitor */}
+      <Monitor1 />
+      <Monitor2 />
+      <Monitor3 />
       {/* Camera Controls */}
       <OrbitControls />
     </Canvas>
