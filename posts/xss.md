@@ -11,6 +11,7 @@ tags:
     '반사형 XSS',
     '저장형 XSS',
     'DOM 기반 XSS',
+    'WebGoat',
   ]
 ---
 
@@ -204,6 +205,21 @@ import DOMPurify from 'dompurify';
 
 const safeHTML = DOMPurify.sanitize(userInputHTML);
 ```
+
+## XSS 실습 방법
+
+⚠️ **주의사항**  
+XSS(Cross-Site Scripting) 취약점 연습은 웹 보안 학습에서 중요한 과정이지만,  
+잘못된 방식으로 연습하면 법적 문제를 초래하거나 실제 시스템에 피해를 줄 수 있다.
+
+실제 웹사이트에서 테스트하는 것은 법적으로 처벌받을 수 있는 불법 행위이다.  
+따라서 이러한 실습은 로컬 환경이나 테스트용으로 설계된 애플리케이션에서만 수행해야 한다.
+
+의도적으로 취약하게 만든 WebGoat라는 보안 학습 플랫폼이 있으니 다운받아서 실행해보고 여기서 다양한 취약점 실습을 해볼 수 있다.
+XSS 말고도 웹 애플리케이션 보안에 관련된 다양한 주제가 있다.  
+퀴즈를 풀면서 취약점을 찾아내는게 재미도 있으니 해볼만 한 것 같다.
+
+[WebGoat Github](https://github.com/WebGoat/WebGoat)
 
 ---
 
