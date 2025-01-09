@@ -22,7 +22,9 @@ const Header = () => {
         currentScrollY > HIDE_HEADER_SCROLL_THRESHOLD
       ) {
         setShowHeader(false);
-      } else setLastScrollY(currentScrollY);
+      } else setShowHeader(true);
+        
+        setLastScrollY(currentScrollY);
 
       // ProgressBar 업데이트
       const scrollableHeight =
