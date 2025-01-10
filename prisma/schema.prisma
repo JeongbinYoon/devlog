@@ -15,6 +15,6 @@ datasource db {
 
 model Like {
   id      Int      @id @default(autoincrement())
-  postId  String   // 게시글 ID
+  postId  String   @unique  
   count   Int      @default(0)
 }

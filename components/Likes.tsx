@@ -1,4 +1,5 @@
 'use client';
+
 import { useAtomValue } from 'jotai';
 import {
   floatingTextsAtom,
@@ -7,7 +8,11 @@ import {
 } from '@/app/atoms';
 import { Heart } from '@/components';
 
-const Likes = () => {
+interface LikesProps {
+  postId: string;
+}
+
+const Likes = ({ postId }: LikesProps) => {
   const clickCount = useAtomValue(likeClickCountAtom);
   const floatingTexts = useAtomValue(floatingTextsAtom);
   const isMaxLikeAttempt = useAtomValue(isMaxLikeAttemptAtom);
@@ -16,7 +21,7 @@ const Likes = () => {
       <div className='flex flex-col items-center'>
         <p className='lg:hidden font-bold mb-4 z-10'>글이 마음에 드셨나요?</p>
         <div className='flex flex-col items-center'>
-          <Heart />
+          <Heart postId={postId} />
           <div className='relative w-full mt-2'>
             {floatingTexts.map((id) => (
               <span

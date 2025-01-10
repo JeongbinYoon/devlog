@@ -11,8 +11,13 @@ import {
 } from '@/app/atoms';
 import { HeartSVG } from '@/components';
 import { MAX_LIKES_CLICK_COUNT } from '@/app/constants';
+import { countUp } from '@/app/blog/[slug]/actions';
 
-const Heart = () => {
+interface HeartProps {
+  postId: string;
+}
+
+const Heart = ({ postId }: HeartProps) => {
   const waves = [
     { opacity: 'opacity-50' },
     { opacity: 'opacity-30' },
@@ -50,6 +55,8 @@ const Heart = () => {
       setTimeout(() => {
         setFloatingTexts((prev) => prev.filter((item) => item !== id));
       }, 500);
+
+      countUp({ postId });
       return newCount;
     });
 
