@@ -8,10 +8,11 @@ import {
   isMaxLikeAttemptAtom,
   isShakeAtom,
   likeClickCountAtom,
+  likesCountAtom,
 } from '@/app/atoms';
 import { HeartSVG } from '@/components';
 import { MAX_LIKES_CLICK_COUNT } from '@/app/constants';
-import { countUp } from '@/app/blog/[slug]/actions';
+import { countUp, getCount } from '@/app/blog/[slug]/actions';
 
 interface HeartProps {
   postId: string;
@@ -27,6 +28,7 @@ const Heart = ({ postId }: HeartProps) => {
   const uniqueId = useId();
   const MAX_BUBBLE_COUNT = 14;
   const [clickCount, setClickCount] = useAtom(likeClickCountAtom);
+  const setLikesCount = useSetAtom(likesCountAtom);
   const setIsMaxLikeAttempt = useSetAtom(isMaxLikeAttemptAtom);
   const setFloatingTexts = useSetAtom(floatingTextsAtom);
   const [isShake, setIsShake] = useAtom(isShakeAtom);
@@ -63,6 +65,14 @@ const Heart = ({ postId }: HeartProps) => {
     onFocusHeart();
   };
 
+  const getLikesCount = useCallback(async () => {
+    if (postId) {
+      const data = await getCount({ postId });
+      console.log(data);
+      setLikesCount(data?.count || 0);
+    }
+  }, [postId, setLikesCount]);
+
   const onMaxEffect = useCallback(() => {
     setStartMaxEffect(true); // 첫 번째 원 효과
     setTimeout(() => {
@@ -75,6 +85,10 @@ const Heart = ({ postId }: HeartProps) => {
 
     onStartBubbleEffect();
   }, []);
+
+  useEffect(() => {
+    getLikesCount();
+  }, [clickCount, getLikesCount]);
 
   // Max 효과
   useEffect(() => {

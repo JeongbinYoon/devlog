@@ -6,6 +6,12 @@ interface CountUp {
   postId: string;
 }
 
+export const getCount = async ({ postId }: CountUp) => {
+  return await prisma.like.findUnique({
+    where: { postId },
+  });
+};
+
 // 좋아요 눌렀을 때 레코드 존재 시 +1, 아닌경우 create
 export const countUp = async ({ postId }: CountUp) => {
   return await prisma.like.upsert({

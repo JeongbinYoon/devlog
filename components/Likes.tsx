@@ -4,7 +4,7 @@ import { useAtomValue } from 'jotai';
 import {
   floatingTextsAtom,
   isMaxLikeAttemptAtom,
-  likeClickCountAtom,
+  likesCountAtom,
 } from '@/app/atoms';
 import { Heart } from '@/components';
 
@@ -13,9 +13,9 @@ interface LikesProps {
 }
 
 const Likes = ({ postId }: LikesProps) => {
-  const clickCount = useAtomValue(likeClickCountAtom);
   const floatingTexts = useAtomValue(floatingTextsAtom);
   const isMaxLikeAttempt = useAtomValue(isMaxLikeAttemptAtom);
+  const likesCount = useAtomValue(likesCountAtom);
   return (
     <div className='flex justify-center items-center w-full py-10 lg:w-[130px] lg:ml-12'>
       <div className='flex flex-col items-center'>
@@ -33,7 +33,7 @@ const Likes = ({ postId }: LikesProps) => {
             ))}
 
             <p className='text-center text-2xl font-bold text-[#e41010]'>
-              {clickCount}
+              {likesCount}
             </p>
             {isMaxLikeAttempt && (
               <p className='text-center text-sm text-gray-400 animate-fade-in'>
