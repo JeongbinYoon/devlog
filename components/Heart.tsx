@@ -13,6 +13,7 @@ import {
 import { HeartSVG } from '@/components';
 import { MAX_LIKES_CLICK_COUNT } from '@/app/constants';
 import { countUp, getCount } from '@/app/blog/[slug]/actions';
+import { usePathname } from 'next/navigation';
 
 interface HeartProps {
   postId: string;
@@ -37,6 +38,7 @@ const Heart = ({ postId }: HeartProps) => {
   const [startSecondMaxEffect, setStartSecondMaxEffect] = useState(false);
   const [floatBubbles, setFloatBubbles] = useState(false);
   const shakeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pathName = usePathname();
 
   const waveRefs = useRef<(HTMLDivElement | null)[]>([]);
   const rotationRefs = useRef<number[]>(waves.map(() => 0)); // 각 웨이브의 회전 값 유지
@@ -85,6 +87,10 @@ const Heart = ({ postId }: HeartProps) => {
 
     onStartBubbleEffect();
   }, []);
+
+  useEffect(() => {
+    setClickCount(0);
+  }, [pathName, setClickCount]);
 
   useEffect(() => {
     getLikesCount();
@@ -165,6 +171,7 @@ const Heart = ({ postId }: HeartProps) => {
       })
     );
     setTimeout(() => setFloatBubbles(true), 500);
+    setTimeout(() => setFloatBubbles(false), 1000);
   };
 
   useEffect(() => {
