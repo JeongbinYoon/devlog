@@ -13,9 +13,9 @@ import {
 } from 'react';
 
 const menuItems = [
-  { name: 'Home', path: '/' },
+  // { name: 'Home', path: '/' },
   { name: 'Blog', path: '/blog' },
-  { name: 'About', path: '/about' },
+  { name: 'Guestbook', path: '/guestbook' },
 ];
 
 const Nav = () => {

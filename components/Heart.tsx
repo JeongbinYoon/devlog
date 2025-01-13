@@ -70,7 +70,6 @@ const Heart = ({ postId }: HeartProps) => {
   const getLikesCount = useCallback(async () => {
     if (postId) {
       const data = await getCount({ postId });
-      console.log(data);
       setLikesCount(data?.count || 0);
     }
   }, [postId, setLikesCount]);

@@ -3,12 +3,7 @@
 import { ComponentType } from 'react';
 import { useAtom } from 'jotai';
 import { isSidebarOpenAtom } from '@/app/atoms';
-import {
-  Bars3Icon,
-  MagnifyingGlassIcon,
-  SunIcon,
-  XMarkIcon,
-} from '@/components/icons';
+import { Bars3Icon, XMarkIcon } from '@/components/icons';
 
 interface ButtonType {
   Icon: ComponentType<React.SVGProps<SVGSVGElement>>;
@@ -39,12 +34,12 @@ const HeaderTools = () => {
 
   return (
     <div className='flex gap-1'>
-      <IconButton
+      {/* <IconButton
         Icon={MagnifyingGlassIcon}
         label={'검색'}
         iconSize={'size-4'}
       />
-      <IconButton Icon={SunIcon} label={'테마 변경'} />
+      <IconButton Icon={SunIcon} label={'테마 변경'} /> */}
       <IconButton
         Icon={isSidebarOpen ? XMarkIcon : Bars3Icon}
         label={`메뉴 ${isSidebarOpen ? '닫기' : '열기'}`}

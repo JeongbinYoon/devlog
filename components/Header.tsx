@@ -23,8 +23,8 @@ const Header = () => {
       ) {
         setShowHeader(false);
       } else setShowHeader(true);
-        
-        setLastScrollY(currentScrollY);
+
+      setLastScrollY(currentScrollY);
 
       // ProgressBar 업데이트
       const scrollableHeight =
@@ -47,10 +47,12 @@ const Header = () => {
     >
       <div className='flex justify-between items-center max-w-3xl h-16 mx-auto px-5 md:px-0'>
         <h1>
-          <Link href={'/'}>LOGO</Link>
+          <Link href={'/'} className='font-bold text-lg'>
+            LOGO
+          </Link>
         </h1>
 
-        <div className='hidden md:block'>
+        <div className='hidden md:block ml-auto'>
           <Nav />
         </div>
         <HeaderTools />
