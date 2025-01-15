@@ -7,9 +7,11 @@ export interface Post {
   contentHtml: string;
 }
 
+export type Vector3 = [number, number, number];
+
 interface WallProps {
-  position: [number, number, number];
-  rotation?: [number, number, number]; // rotation을 선택적으로 추가
+  position: Vector3;
+  rotation?: Vector3; // rotation을 선택적으로 추가
 }
 
 interface KeyBoardKey {
@@ -19,11 +21,11 @@ interface KeyBoardKey {
 
 export interface KeyBoardData {
   key: KeyBoardKey;
-  position: [number, number, number];
+  position: Vector3;
 }
 
 export interface KeycapProps {
-  position: [number, number, number];
+  position: Vector3;
   label?: string;
   width: number;
 }
