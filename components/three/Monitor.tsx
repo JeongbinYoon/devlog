@@ -17,9 +17,9 @@ const Monitor = ({
   };
 
   return (
-    <>
+    <group position={position} rotation={rotation}>
       {/* 화면 영역 */}
-      <mesh name='Monitor Screen' position={position} rotation={rotation}>
+      <mesh name='Monitor Screen'>
         <boxGeometry
           args={[
             MONITOR_DIMENSIONS.width,
@@ -31,7 +31,7 @@ const Monitor = ({
       </mesh>
 
       {/* 테두리 */}
-      <lineSegments position={position} rotation={rotation}>
+      <lineSegments>
         <edgesGeometry
           attach='geometry'
           args={[
@@ -44,7 +44,7 @@ const Monitor = ({
         />
         <lineBasicMaterial color='black' />
       </lineSegments>
-    </>
+    </group>
   );
 };
 

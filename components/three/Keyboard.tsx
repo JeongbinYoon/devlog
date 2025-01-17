@@ -1,9 +1,14 @@
 import * as THREE from 'three';
 import { keyboardData } from '@/app/constants';
-import { KeyBoardData } from '@/app/types/blog';
+import { KeyBoardData, Vector3 } from '@/app/types/blog';
 import { Keycap } from '@/components/three';
 
-const Keyboard = () => {
+interface KeyboardProps {
+  position?: Vector3;
+  rotation?: Vector3;
+}
+
+const Keyboard = ({ position, rotation }: KeyboardProps) => {
   const DEFAULT_KEYCAP_WIDTH = 1;
   const keyPositions: KeyBoardData[] = [];
 
@@ -22,7 +27,7 @@ const Keyboard = () => {
   });
 
   return (
-    <group position={[0, 0, 0]}>
+    <group position={position} rotation={rotation} scale={[0.1, 0.1, 0.1]}>
       {/* 키캡 */}
       {keyPositions.map(({ key, position }, index) => (
         <Keycap

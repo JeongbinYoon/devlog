@@ -1,9 +1,14 @@
 import * as THREE from 'three';
 import { Vector3 } from '@/app/types/blog';
 
-const Laptop = () => {
-  const monitor1Position: Vector3 = [2.4, 2.2, 0 - 1];
-  const monitor2Position: Vector3 = [2.4, 1.5, -0.6];
+interface LaptopProps {
+  position?: Vector3;
+  rotation?: Vector3;
+}
+
+const Laptop = ({ position, rotation }: LaptopProps) => {
+  const monitor1Position: Vector3 = [0, 0, 0];
+  const monitor2Position: Vector3 = [0, -0.7, 0.4];
 
   const MONITOR_DIMENSIONS = {
     width: 1.6,
@@ -12,7 +17,7 @@ const Laptop = () => {
   };
 
   return (
-    <>
+    <group position={position} rotation={rotation}>
       <mesh name='Top Cover' position={monitor1Position}>
         <boxGeometry
           args={[
@@ -62,7 +67,7 @@ const Laptop = () => {
         />
         <lineBasicMaterial color='black' />
       </lineSegments>
-    </>
+    </group>
   );
 };
 
