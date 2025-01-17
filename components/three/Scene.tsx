@@ -34,6 +34,7 @@ const Scene = () => {
       <Monitor
         position={[-2.35, 2.1, -0.5]}
         rotation={[Math.PI / 30, Math.PI / 10, Math.PI / 2]}
+        direction='col'
       />
       <Monitor position={[0, 2, -1]} rotation={[Math.PI / 40, 0, 0]} />
       <Laptop position={[2.4, 1.6, -0.6]} rotation={[0, -Math.PI / 6, 0]} />

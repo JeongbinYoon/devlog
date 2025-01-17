@@ -1,21 +1,19 @@
 import * as THREE from 'three';
 import { Vector3 } from '@/app/types/blog';
+import { MONITOR_DIMENSIONS } from '@/app/constants';
+import { Screen } from '@/components/three';
 
 interface MonitorProps {
   position?: Vector3;
   rotation?: Vector3;
+  direction?: 'row' | 'col';
 }
 
 const Monitor = ({
   position = [0, 0, 0],
   rotation = [0, 0, 0],
+  direction = 'row',
 }: MonitorProps) => {
-  const MONITOR_DIMENSIONS = {
-    width: 3,
-    height: 1.6875,
-    depth: 0.05,
-  };
-
   return (
     <group position={position} rotation={rotation}>
       {/* 화면 영역 */}
@@ -44,6 +42,9 @@ const Monitor = ({
         />
         <lineBasicMaterial color='black' />
       </lineSegments>
+
+      {/* 입력창 */}
+      <Screen direction={direction} />
     </group>
   );
 };

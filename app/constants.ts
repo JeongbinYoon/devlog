@@ -80,3 +80,9 @@ export const keyboardData = [
     { name: '>' },
   ],
 ];
+export const MONITOR_DIMENSIONS = {
+  width: 3,
+  height: 1.6875,
+  depth: 0.05,
+  frameWidth: 0.1,
+};

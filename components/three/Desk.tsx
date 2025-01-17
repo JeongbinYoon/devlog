@@ -65,7 +65,7 @@ const Desk = () => {
         <React.Fragment key={index}>
           <mesh position={position} key={index}>
             <boxGeometry args={[0.3, 0.15, SECOND_LEG_WIDTH]} />
-            <meshBasicMaterial color='DESK_WIDTH' toneMapped={false} />
+            <meshBasicMaterial color='white' toneMapped={false} />
           </mesh>
           <lineSegments position={position}>
             <edgesGeometry
