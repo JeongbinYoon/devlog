@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { Vector3 } from '@/app/types/blog';
 
 interface MonitorProps {
@@ -26,8 +27,23 @@ const Monitor = ({
             MONITOR_DIMENSIONS.depth,
           ]}
         />
-        <meshStandardMaterial color='white' />
+        <meshBasicMaterial color='white' toneMapped={false} />
       </mesh>
+
+      {/* 테두리 */}
+      <lineSegments position={position} rotation={rotation}>
+        <edgesGeometry
+          attach='geometry'
+          args={[
+            new THREE.BoxGeometry(
+              MONITOR_DIMENSIONS.width,
+              MONITOR_DIMENSIONS.height,
+              MONITOR_DIMENSIONS.depth
+            ),
+          ]}
+        />
+        <lineBasicMaterial color='black' />
+      </lineSegments>
     </>
   );
 };

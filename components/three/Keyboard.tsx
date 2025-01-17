@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { keyboardData } from '@/app/constants';
 import { KeyBoardData } from '@/app/types/blog';
 import { Keycap } from '@/components/three';
@@ -35,8 +36,12 @@ const Keyboard = () => {
       {/* 키보드 판 */}
       <mesh position={[8, -2, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <boxGeometry args={[16.4, 0.7, 5.2]} />
-        <meshStandardMaterial color='black' wireframe />
+        <meshBasicMaterial color='white' toneMapped={false} />
       </mesh>
+      <lineSegments position={[8, -2, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <edgesGeometry args={[new THREE.BoxGeometry(16.4, 0.7, 5.2)]} />
+        <lineBasicMaterial color='black' />
+      </lineSegments>
     </group>
   );
 };

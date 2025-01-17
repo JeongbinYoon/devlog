@@ -11,10 +11,10 @@ import {
 
 const Scene = () => {
   return (
-    <Canvas>
+    <Canvas style={{ background: 'white' }}>
       {/* 라이트 */}
-      <ambientLight intensity={0.3} />
-      <directionalLight position={[10, 10, 10]} intensity={0.8} castShadow />
+      <ambientLight intensity={0.8} />
+      <directionalLight position={[10, 10, 10]} intensity={1} />
 
       {/* Room */}
       <Wall position={[0, 1.65, -4.85]} rotation={[0, 0, 0]} />

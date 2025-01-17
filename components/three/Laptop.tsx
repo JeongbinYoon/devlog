@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { Vector3 } from '@/app/types/blog';
 
 const Laptop = () => {
@@ -12,7 +13,7 @@ const Laptop = () => {
 
   return (
     <>
-      <mesh position={monitor1Position}>
+      <mesh name='Top Cover' position={monitor1Position}>
         <boxGeometry
           args={[
             MONITOR_DIMENSIONS.width,
@@ -20,9 +21,26 @@ const Laptop = () => {
             MONITOR_DIMENSIONS.depth,
           ]}
         />
-        <meshStandardMaterial color='white' />
+        <meshBasicMaterial color='white' toneMapped={false} />
       </mesh>
-      <mesh position={monitor2Position} rotation={[-Math.PI / 3, 0, 0]}>
+      <lineSegments position={monitor1Position}>
+        <edgesGeometry
+          args={[
+            new THREE.BoxGeometry(
+              MONITOR_DIMENSIONS.width,
+              MONITOR_DIMENSIONS.height,
+              MONITOR_DIMENSIONS.depth
+            ),
+          ]}
+        />
+        <lineBasicMaterial color='black' />
+      </lineSegments>
+
+      <mesh
+        name='Bottom Cover'
+        position={monitor2Position}
+        rotation={[-Math.PI / 3, 0, 0]}
+      >
         <boxGeometry
           args={[
             MONITOR_DIMENSIONS.width,
@@ -30,8 +48,20 @@ const Laptop = () => {
             MONITOR_DIMENSIONS.depth,
           ]}
         />
-        <meshStandardMaterial color='white' />
+        <meshBasicMaterial color='white' toneMapped={false} />
       </mesh>
+      <lineSegments position={monitor2Position} rotation={[-Math.PI / 3, 0, 0]}>
+        <edgesGeometry
+          args={[
+            new THREE.BoxGeometry(
+              MONITOR_DIMENSIONS.width,
+              MONITOR_DIMENSIONS.height,
+              MONITOR_DIMENSIONS.depth
+            ),
+          ]}
+        />
+        <lineBasicMaterial color='black' />
+      </lineSegments>
     </>
   );
 };

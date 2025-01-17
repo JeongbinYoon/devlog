@@ -1,3 +1,5 @@
+import React from 'react';
+import * as THREE from 'three';
 import { Vector3 } from '@/app/types/blog';
 
 const Desk = () => {
@@ -34,21 +36,44 @@ const Desk = () => {
       {/* 책상 판 */}
       <mesh position={deskTopPosition}>
         <boxGeometry args={[DESK_WIDTH, 0.15, DESK_DEPTH]} />
-        <meshStandardMaterial color='white' />
+        <meshBasicMaterial color='white' toneMapped={false} />
       </mesh>
+
+      <lineSegments position={deskTopPosition}>
+        <edgesGeometry
+          args={[new THREE.BoxGeometry(DESK_WIDTH, 0.15, DESK_DEPTH)]}
+        />
+        <lineBasicMaterial color='black' />
+      </lineSegments>
 
       {/* 책상 다리 */}
       {leg1Positions.map((position, index) => (
-        <mesh position={position} key={index}>
-          <boxGeometry args={[0.2, FIRST_LEG_HEIGHT, 0.2]} />
-          <meshStandardMaterial color='white' />
-        </mesh>
+        <React.Fragment key={index}>
+          <mesh position={position}>
+            <boxGeometry args={[0.2, FIRST_LEG_HEIGHT, 0.2]} />
+            <meshBasicMaterial color='white' toneMapped={false} />
+          </mesh>
+          <lineSegments key={index} position={position}>
+            <edgesGeometry
+              args={[new THREE.BoxGeometry(0.2, FIRST_LEG_HEIGHT, 0.2)]}
+            />
+            <lineBasicMaterial color='black' />
+          </lineSegments>
+        </React.Fragment>
       ))}
       {leg2Positions.map((position, index) => (
-        <mesh position={position} key={index}>
-          <boxGeometry args={[0.3, 0.15, SECOND_LEG_WIDTH]} />
-          <meshStandardMaterial color='DESK_WIDTH' />
-        </mesh>
+        <React.Fragment key={index}>
+          <mesh position={position} key={index}>
+            <boxGeometry args={[0.3, 0.15, SECOND_LEG_WIDTH]} />
+            <meshBasicMaterial color='DESK_WIDTH' toneMapped={false} />
+          </mesh>
+          <lineSegments position={position}>
+            <edgesGeometry
+              args={[new THREE.BoxGeometry(0.3, 0.15, SECOND_LEG_WIDTH)]}
+            />
+            <lineBasicMaterial color='black' />
+          </lineSegments>
+        </React.Fragment>
       ))}
     </>
   );
