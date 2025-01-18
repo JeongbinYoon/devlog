@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Html } from '@react-three/drei';
+import { Html, Text } from '@react-three/drei';
 import {
   useCallback,
   useEffect,
@@ -8,6 +8,7 @@ import {
   useState,
 } from 'react';
 import { MONITOR_DIMENSIONS } from '@/app/constants';
+import { SubmitButton } from '@/components/three';
 
 const Screen = ({ direction }: { direction: string }) => {
   const [text, setText] = useState('');
@@ -46,7 +47,7 @@ const Screen = ({ direction }: { direction: string }) => {
         context.fillRect(0, 0, canvas.width, canvas.height);
         context.fillStyle = '#000000'; // 검은 텍스트
         context.font = '24px Arial';
-        context.fillText(text, 10, 30);
+        context.fillText(text, 30, 130);
 
         if (textureRef.current) {
           textureRef.current.needsUpdate = true;
@@ -106,21 +107,28 @@ const Screen = ({ direction }: { direction: string }) => {
 
       {/* 가로 모니터 입력창*/}
       {direction === 'row' && (
-        <Html position={[0, -0.4, 0]} scale={0.25} transform>
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            style={{
-              width: `450px`,
-              height: '110px',
-              padding: '4px',
-              border: 'none',
-              borderRadius: '4px',
-              fontSize: '20px',
-              resize: 'none',
-            }}
-          />
-        </Html>
+        <>
+          <Text position={[0, 0.6, 0.04]} fontSize={0.1} color='black'>
+            안녕하세요! 반갑습니다 ^___^
+          </Text>
+          <Html position={[0, -0.4, 0]} scale={0.25} transform>
+            <textarea
+              value={text}
+              placeholder='방명록을 남겨주세요'
+              onChange={(e) => setText(e.target.value)}
+              style={{
+                width: `450px`,
+                height: '110px',
+                padding: '20px',
+                border: 'none',
+                borderRadius: '4px',
+                fontSize: '20px',
+                resize: 'none',
+              }}
+            />
+          </Html>
+          <SubmitButton text={text} />
+        </>
       )}
 
       {/* 세로 모니터 입력창*/}
