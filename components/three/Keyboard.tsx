@@ -19,7 +19,8 @@ const Keyboard = ({ position, rotation }: KeyboardProps) => {
       const keyWidth = key.width || DEFAULT_KEYCAP_WIDTH;
       const keyInfo: KeyBoardData = {
         key,
-        position: [currentX + keyWidth / 2, -rowIndex, 0.3],
+        position: [currentX + keyWidth / 2, -rowIndex, 0.2],
+        rowIndex,
       };
       keyPositions.push(keyInfo);
       currentX += keyWidth; // 다음 키의 X 위치를 갱신
@@ -29,11 +30,12 @@ const Keyboard = ({ position, rotation }: KeyboardProps) => {
   return (
     <group position={position} rotation={rotation} scale={[0.1, 0.1, 0.1]}>
       {/* 키캡 */}
-      {keyPositions.map(({ key, position }, index) => (
+      {keyPositions.map(({ key, position, rowIndex }) => (
         <Keycap
+          key={key.code}
           position={position}
-          key={key.name + index}
-          label={key.name}
+          keyData={key}
+          rowIndex={rowIndex}
           width={key.width || DEFAULT_KEYCAP_WIDTH}
         />
       ))}

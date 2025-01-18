@@ -16,16 +16,12 @@ interface WallProps {
 
 interface KeyBoardKey {
   name: string;
+  code: string;
   width?: number;
 }
 
 export interface KeyBoardData {
   key: KeyBoardKey;
   position: Vector3;
-}
-
-export interface KeycapProps {
-  position: Vector3;
-  label?: string;
-  width: number;
+  rowIndex: number;
 }
