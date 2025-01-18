@@ -1,28 +1,8 @@
-'use client';
+interface ProgressBarProps {
+  progress: number;
+}
 
-import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
-
-const ProgressBar = () => {
-  const [progress, setProgress] = useState(0);
-  const pathName = usePathname();
-
-  useEffect(() => setProgress(0), [pathName]);
-
-  useEffect(() => {
-    const updateProgressBar = () => {
-      requestAnimationFrame(() => {
-        const scrollableHeight =
-          document.documentElement.scrollHeight - window.innerHeight;
-        const progress = window.scrollY / scrollableHeight;
-        setProgress(Math.min(progress, 1));
-      });
-    };
-
-    window.addEventListener('scroll', updateProgressBar);
-    return () => window.removeEventListener('scroll', updateProgressBar);
-  }, []);
-
+const ProgressBar = ({ progress }: ProgressBarProps) => {
   return (
     <div
       className={`h-[1px] transition-colors duration-300 ${

@@ -32,7 +32,7 @@ const PostDetailPage = async ({ params }: Params) => {
           </section>
         </div>
         <div className='lg:hidden block'>
-          <Likes />
+          <Likes postId={id} />
         </div>
         <PrevNextPosts posts={{ prevPost, nextPost }} />
         <Comments />

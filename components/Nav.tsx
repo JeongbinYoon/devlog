@@ -13,7 +13,7 @@ import {
 } from 'react';
 
 const menuItems = [
-  { name: 'Home', path: '/' },
+  // { name: 'Home', path: '/' },
   { name: 'Blog', path: '/blog' },
   { name: 'Guestbook', path: '/guestbook' },
 ];

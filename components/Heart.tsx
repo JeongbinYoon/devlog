@@ -8,11 +8,18 @@ import {
   isMaxLikeAttemptAtom,
   isShakeAtom,
   likeClickCountAtom,
+  likesCountAtom,
 } from '@/app/atoms';
 import { HeartSVG } from '@/components';
 import { MAX_LIKES_CLICK_COUNT } from '@/app/constants';
+import { countUp, getCount } from '@/app/blog/[slug]/actions';
+import { usePathname } from 'next/navigation';
 
-const Heart = () => {
+interface HeartProps {
+  postId: string;
+}
+
+const Heart = ({ postId }: HeartProps) => {
   const waves = [
     { opacity: 'opacity-50' },
     { opacity: 'opacity-30' },
@@ -22,6 +29,7 @@ const Heart = () => {
   const uniqueId = useId();
   const MAX_BUBBLE_COUNT = 14;
   const [clickCount, setClickCount] = useAtom(likeClickCountAtom);
+  const setLikesCount = useSetAtom(likesCountAtom);
   const setIsMaxLikeAttempt = useSetAtom(isMaxLikeAttemptAtom);
   const setFloatingTexts = useSetAtom(floatingTextsAtom);
   const [isShake, setIsShake] = useAtom(isShakeAtom);
@@ -30,6 +38,7 @@ const Heart = () => {
   const [startSecondMaxEffect, setStartSecondMaxEffect] = useState(false);
   const [floatBubbles, setFloatBubbles] = useState(false);
   const shakeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pathName = usePathname();
 
   const waveRefs = useRef<(HTMLDivElement | null)[]>([]);
   const rotationRefs = useRef<number[]>(waves.map(() => 0)); // 각 웨이브의 회전 값 유지
@@ -50,11 +59,20 @@ const Heart = () => {
       setTimeout(() => {
         setFloatingTexts((prev) => prev.filter((item) => item !== id));
       }, 500);
+
+      countUp({ postId });
       return newCount;
     });
 
     onFocusHeart();
   };
+
+  const getLikesCount = useCallback(async () => {
+    if (postId) {
+      const data = await getCount({ postId });
+      setLikesCount(data?.count || 0);
+    }
+  }, [postId, setLikesCount]);
 
   const onMaxEffect = useCallback(() => {
     setStartMaxEffect(true); // 첫 번째 원 효과
@@ -68,6 +86,14 @@ const Heart = () => {
 
     onStartBubbleEffect();
   }, []);
+
+  useEffect(() => {
+    setClickCount(0);
+  }, [pathName, setClickCount]);
+
+  useEffect(() => {
+    getLikesCount();
+  }, [clickCount, getLikesCount]);
 
   // Max 효과
   useEffect(() => {
@@ -144,6 +170,7 @@ const Heart = () => {
       })
     );
     setTimeout(() => setFloatBubbles(true), 500);
+    setTimeout(() => setFloatBubbles(false), 1000);
   };
 
   useEffect(() => {
