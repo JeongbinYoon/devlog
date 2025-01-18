@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { Vector3 } from '@/app/types/blog';
 
 const Desk = () => {
-  const deskTopPosition: Vector3 = [0, 0.4, 0]; // 책상 판 위치
+  const deskTopPosition: Vector3 = [0, 2.9, 0]; // 책상 판 위치
   const FIRST_LEG_HEIGHT = 2.5; // 다리 높이
   const SECOND_LEG_WIDTH = 3; // 다리 받침 길이
   const DESK_WIDTH = 7; // 책상 너비
