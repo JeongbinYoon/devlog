@@ -6,6 +6,7 @@ import {
   Keyboard,
   Laptop,
   Monitor,
+  SpeechBubble,
   Wall,
 } from '@/components/three';
 
@@ -23,6 +24,7 @@ const Scene = () => {
 
       {/* Room */}
       <Wall position={[0, 7.35, -7.35]} rotation={[0, 0, 0]} />
+      <SpeechBubble position={[6, 7, -7.35]} text='말풍선 텍스트 예시입니다' />
       <Wall position={[-7.35, 7.35, 0]} rotation={[0, Math.PI / 2, 0]} />
       <Floor />
 
