@@ -3,6 +3,7 @@ import { OrbitControls } from '@react-three/drei';
 import {
   Desk,
   Floor,
+  GradientPlane,
   Keyboard,
   Laptop,
   Monitor,
@@ -29,6 +30,8 @@ const Scene = () => {
       {/* Room */}
       <Wall position={[0, 7.35, -7.35]} rotation={[0, 0, 0]} />
       <SpeechBubbleList />
+      <GradientPlane />
+
       <Wall position={[-7.35, 7.35, 0]} rotation={[0, Math.PI / 2, 0]} />
       <Floor />
 

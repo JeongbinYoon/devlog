@@ -72,7 +72,7 @@ const SpeechBubbleList = () => {
         <SpeechBubble
           key={index}
           text={message}
-          position={[6.5, index * 1.5, -7.35]}
+          position={[6.5, 11 - index * 1.5, -7.35]}
         />
       ))}
     </group>

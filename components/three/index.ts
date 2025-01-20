@@ -1,5 +1,6 @@
 import Desk from '@/components/three/Desk';
 import Floor from '@/components/three/Floor';
+import GradientPlane from '@/components/three/GradientPlane';
 import Keyboard from '@/components/three/Keyboard';
 import Keycap from '@/components/three/Keycap';
 import Laptop from '@/components/three/Laptop';
@@ -14,6 +15,7 @@ import Wall from '@/components/three/Wall';
 export {
   Desk,
   Floor,
+  GradientPlane,
   Keyboard,
   Keycap,
   Laptop,

@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import { Text } from '@react-three/drei';
-import { useMemo } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Vector3 } from '@/app/types/blog';
+import { useFrame } from '@react-three/fiber';
 
 interface SpeechBubbleProps {
   text: string;
@@ -9,6 +10,19 @@ interface SpeechBubbleProps {
 }
 
 const SpeechBubble = ({ text, position }: SpeechBubbleProps) => {
+  const groupRef = useRef<THREE.Group>(null);
+  const worldPositionY = useRef(0);
+  const [isShow, setIsShow] = useState(false);
+
+  useFrame(() => {
+    if (groupRef.current) {
+      const worldPosition = new THREE.Vector3();
+      groupRef.current.getWorldPosition(worldPosition);
+      worldPositionY.current = worldPosition.y;
+      setIsShow(worldPosition.y < 13 && worldPosition.y > 1);
+    }
+  });
+
   // 텍스트 길이에 따라 말풍선 길이 계산 (문자당 0.2)
   const textWidth = useMemo(() => {
     const textLength = text.length;
@@ -35,23 +49,25 @@ const SpeechBubble = ({ text, position }: SpeechBubbleProps) => {
   }, [textWidth]);
 
   return (
-    <group position={position}>
-      {/* 테두리 */}
-      <lineSegments position={[-textWidth / 2, 0.3, 0]}>
-        <edgesGeometry args={[new THREE.ShapeGeometry(shape)]} />
-        <lineBasicMaterial color='black' />
-      </lineSegments>
+    <group ref={groupRef} position={position}>
+      {isShow && (
+        <>
+          <lineSegments position={[-textWidth / 2, 0.8, 0]}>
+            <edgesGeometry args={[new THREE.ShapeGeometry(shape)]} />
+            <lineBasicMaterial color='black' />
+          </lineSegments>
 
-      {/* 텍스트 */}
-      <Text
-        position={[-textWidth / 2, 0.3, 0.01]}
-        fontSize={0.2}
-        color='black'
-        anchorX='center'
-        anchorY='middle'
-      >
-        {text}
-      </Text>
+          <Text
+            position={[-textWidth / 2, 0.8, 0.01]}
+            fontSize={0.2}
+            color='black'
+            anchorX='center'
+            anchorY='middle'
+          >
+            {text}
+          </Text>
+        </>
+      )}
     </group>
   );
 };
