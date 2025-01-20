@@ -6,11 +6,15 @@ import {
   Keyboard,
   Laptop,
   Monitor,
-  SpeechBubble,
+  SpeechBubbleList,
   Wall,
 } from '@/components/three';
+import { useAtomValue } from 'jotai';
+import { orbitEnabledAtom } from '@/app/atoms/appAtoms';
 
 const Scene = () => {
+  const orbitEnabled = useAtomValue(orbitEnabledAtom);
+
   return (
     <Canvas
       style={{ background: 'white' }}
@@ -24,7 +28,7 @@ const Scene = () => {
 
       {/* Room */}
       <Wall position={[0, 7.35, -7.35]} rotation={[0, 0, 0]} />
-      <SpeechBubble position={[6, 7, -7.35]} text='말풍선 텍스트 예시입니다' />
+      <SpeechBubbleList />
       <Wall position={[-7.35, 7.35, 0]} rotation={[0, Math.PI / 2, 0]} />
       <Floor />
 
@@ -42,7 +46,7 @@ const Scene = () => {
       <Laptop position={[2.4, 4.1, -0.6]} rotation={[0, -Math.PI / 6, 0]} />
 
       {/* Camera Controls */}
-      <OrbitControls makedefault target={[0, 4, 0]} />
+      <OrbitControls makedefault target={[0, 4, 0]} enabled={orbitEnabled} />
       <axesHelper args={[5]} />
     </Canvas>
   );

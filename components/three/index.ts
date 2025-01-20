@@ -7,6 +7,7 @@ import Monitor from '@/components/three/Monitor';
 import Scene from '@/components/three/Scene';
 import Screen from '@/components/three/Screen';
 import SpeechBubble from '@/components/three/SpeechBubble';
+import SpeechBubbleList from '@/components/three/SpeechBubbleList';
 import SubmitButton from '@/components/three/SubmitButton';
 import Wall from '@/components/three/Wall';
 
@@ -20,6 +21,7 @@ export {
   Scene,
   Screen,
   SpeechBubble,
+  SpeechBubbleList,
   SubmitButton,
   Wall,
 };
