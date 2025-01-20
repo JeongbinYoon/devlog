@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { SpeechBubble } from '@/components/three';
 import { useSetAtom } from 'jotai';
@@ -31,9 +31,12 @@ const SpeechBubbleList = () => {
   const onPointerMove = (event: ThreeEvent<PointerEvent>) => {
     if (isDraggingRef.current && groupRef.current) {
       const deltaY = event.clientY - lastMouseY; // 마우스 이동 거리 계산
-      groupRef.current.position.y -= deltaY * 0.005; // 이동 거리만큼 그룹 위치 업데이트
-      setLastMouseY(event.clientY);
-      setOrbitEnabled(false); // OrbitControls 비활성화
+      // 마우스 계산 값이 튀는 경우 방지
+      if (Math.abs(deltaY) < 100) {
+        groupRef.current.position.y -= deltaY * 0.005; // 이동 거리만큼 그룹 위치 업데이트
+        setLastMouseY(event.clientY);
+        setOrbitEnabled(false); // OrbitControls 비활성화
+      }
     }
   };
 
@@ -41,6 +44,22 @@ const SpeechBubbleList = () => {
     isDraggingRef.current = false;
     setOrbitEnabled(true); // OrbitControls 활성화
   };
+
+  // 드래그 중 group 밖으로 포인터가 나간 뒤 마우스를 떼는 경우 드래그 off
+  useEffect(() => {
+    const handlePointerUp = () => {
+      if (isDraggingRef) {
+        isDraggingRef.current = false;
+        setOrbitEnabled(true); // OrbitControls 활성화
+      }
+    };
+
+    window.addEventListener('pointerup', handlePointerUp);
+
+    return () => {
+      window.removeEventListener('pointerup', handlePointerUp);
+    };
+  }, [isDraggingRef, setOrbitEnabled]);
 
   return (
     <group
