@@ -5,13 +5,14 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { lastAddedEntryAtom, orbitEnabledAtom } from '@/app/atoms/appAtoms';
 import { ThreeEvent } from '@react-three/fiber';
 import { getGuestbookEntries } from '@/app/guestbook/actions';
+import { GuestbookEntry } from '@/app/types/blog';
 
 const SpeechBubbleList = () => {
   const isDraggingRef = useRef(false);
   const setOrbitEnabled = useSetAtom(orbitEnabledAtom);
   const groupRef = useRef<THREE.Group>(null);
   const [lastMouseY, setLastMouseY] = useState(0);
-  const [entries, setEntries] = useState([]);
+  const [entries, setEntries] = useState<GuestbookEntry[]>([]);
   const lastAddedEntry = useAtomValue(lastAddedEntryAtom);
 
   const getGuestBookEntries = async () => {
