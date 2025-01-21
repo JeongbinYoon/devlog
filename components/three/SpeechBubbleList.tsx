@@ -1,25 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { SpeechBubble } from '@/components/three';
-import { useSetAtom } from 'jotai';
-import { orbitEnabledAtom } from '@/app/atoms/appAtoms';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { lastAddedEntryAtom, orbitEnabledAtom } from '@/app/atoms/appAtoms';
 import { ThreeEvent } from '@react-three/fiber';
+import { getGuestbookEntries } from '@/app/guestbook/actions';
 
 const SpeechBubbleList = () => {
   const isDraggingRef = useRef(false);
   const setOrbitEnabled = useSetAtom(orbitEnabledAtom);
   const groupRef = useRef<THREE.Group>(null);
   const [lastMouseY, setLastMouseY] = useState(0);
-  const messages = [
-    '안녕하세요!',
-    '안녕하세요! 안녕하세요!',
-    '안녕하세요! 안녕하세요!안녕하세요!',
-    '안녕하세요!',
-    '안녕하세요!안녕하세요!안녕하세요!안녕하세요!',
-    '안녕하세요!안녕하세요!',
-    '안녕하세요!',
-    '안녕하세요!안녕하세요!안녕하세요!안녕하세요!안녕하세요!',
-  ];
+  const [entries, setEntries] = useState([]);
+  const lastAddedEntry = useAtomValue(lastAddedEntryAtom);
+
+  const getGuestBookEntries = async () => {
+    const data = await getGuestbookEntries();
+    setEntries(data);
+  };
+
+  useEffect(() => {
+    getGuestBookEntries();
+  }, [lastAddedEntry]);
 
   const onPointerDown = (event: ThreeEvent<PointerEvent>) => {
     isDraggingRef.current = true;
@@ -68,10 +70,10 @@ const SpeechBubbleList = () => {
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
     >
-      {messages.map((message, index) => (
+      {entries.map(({ content }, index) => (
         <SpeechBubble
           key={index}
-          text={message}
+          text={content}
           position={[6.5, 11 - index * 1.5, -7.35]}
         />
       ))}

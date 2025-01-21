@@ -1,10 +1,11 @@
 import { Html } from '@react-three/drei';
 import { useEffect, useRef, useState } from 'react';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import {
   guestbookInputUserNameAtom,
   guestbookInputPasswordAtom,
   guestbookInputContentAtom,
+  lastAddedEntryAtom,
 } from '@/app/atoms/appAtoms';
 import { addGuestbookEntry } from '@/app/guestbook/actions';
 
@@ -16,10 +17,16 @@ const SubmitButton = () => {
   const [inputContent, setInputContent] = useAtom(guestbookInputContentAtom);
   const [inputUserName, setInputUserName] = useAtom(guestbookInputUserNameAtom);
   const [inputPassword, setInputPassword] = useAtom(guestbookInputPasswordAtom);
+  const setLastAddedEntry = useSetAtom(lastAddedEntryAtom);
 
   const onSubmit = async () => {
     try {
-      await addGuestbookEntry({ inputContent, inputUserName, inputPassword });
+      const result = await addGuestbookEntry({
+        inputContent,
+        inputUserName,
+        inputPassword,
+      });
+      setLastAddedEntry(result);
       setInputUserName('');
       setInputPassword('');
       setInputContent('');

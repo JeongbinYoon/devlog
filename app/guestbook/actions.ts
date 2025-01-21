@@ -9,6 +9,27 @@ type AddGuestbookEntryParams = {
   inputContent: string;
 };
 
+export const getGuestbookEntries = async () => {
+  try {
+    const entries = await prisma.guestbookEntry.findMany({
+      select: {
+        id: true,
+        name: true,
+        content: true,
+        createdAt: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    return entries;
+  } catch (error) {
+    console.error('방명록 목록 조회 중 오류 발생:', error);
+    throw new Error('방명록 목록을 조회하는 중 오류가 발생했습니다.');
+  }
+};
+
 export const addGuestbookEntry = async ({
   inputUserName,
   inputPassword,
