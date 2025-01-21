@@ -1,13 +1,42 @@
 import { Html } from '@react-three/drei';
 import { useEffect, useRef, useState } from 'react';
+import { useAtom, useSetAtom } from 'jotai';
+import {
+  guestbookInputUserNameAtom,
+  guestbookInputPasswordAtom,
+  guestbookInputContentAtom,
+  lastAddedEntryAtom,
+} from '@/app/atoms/appAtoms';
+import { addGuestbookEntry } from '@/app/guestbook/actions';
 
-const SubmitButton = ({ text }: { text: string }) => {
+const SubmitButton = () => {
   const [isShowSubmitButton, setIsShowSubmitButton] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const timeoutRef = useRef<number | null>(null); // 타이머 관리
 
-  const onSubmit = () => {
-    alert('작성 완료');
+  const [inputContent, setInputContent] = useAtom(guestbookInputContentAtom);
+  const [inputUserName, setInputUserName] = useAtom(guestbookInputUserNameAtom);
+  const [inputPassword, setInputPassword] = useAtom(guestbookInputPasswordAtom);
+  const setLastAddedEntry = useSetAtom(lastAddedEntryAtom);
+
+  const onSubmit = async () => {
+    try {
+      const result = await addGuestbookEntry({
+        inputContent,
+        inputUserName,
+        inputPassword,
+      });
+      setLastAddedEntry(result);
+      setInputUserName('');
+      setInputPassword('');
+      setInputContent('');
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message || '등록 중 오류가 발생했습니다.');
+      } else {
+        console.log('알 수 없는 오류', error);
+      }
+    }
     setIsShowSubmitButton(false);
   };
 
@@ -17,7 +46,7 @@ const SubmitButton = ({ text }: { text: string }) => {
       clearTimeout(timeoutRef.current);
     }
 
-    if (text) {
+    if (inputContent) {
       setIsShowSubmitButton(true);
       timeoutRef.current = window.setTimeout(() => setIsAnimating(true), 10); // 트랜지션 시작
     } else {
@@ -27,7 +56,7 @@ const SubmitButton = ({ text }: { text: string }) => {
         500
       );
     }
-  }, [text]);
+  }, [inputContent]);
 
   // 타이머 정리
   useEffect(() => {

@@ -25,3 +25,10 @@ export interface KeyBoardData {
   position: Vector3;
   rowIndex: number;
 }
+
+export interface GuestbookEntry {
+  id: string;
+  name: string;
+  content: string;
+  createdAt: Date;
+}
