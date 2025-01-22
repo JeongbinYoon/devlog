@@ -23,6 +23,11 @@ export const getSortedPostsData = () => {
 
     // metadata 파싱
     const matterResult = matter(fileContents);
+
+    const dateStr = matterResult.data.date;
+    const [year, month, day] = dateStr.split('-');
+    matterResult.data.formattedDate = `${year}년 ${month}월 ${day}일`;
+
     const slug = matterResult.data.title.toLowerCase().replace(/\s+/g, '-');
 
     return {
