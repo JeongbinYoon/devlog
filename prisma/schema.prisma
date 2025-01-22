@@ -18,3 +18,11 @@ model Like {
   postId  String   @unique  
   count   Int      @default(0)
 }
+
+model GuestbookEntry {
+  id          String   @id @default(cuid())
+  name        String   
+  hashedPassword String 
+  content     String  
+  createdAt   DateTime @default(now())
+}

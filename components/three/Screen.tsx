@@ -1,17 +1,12 @@
 import * as THREE from 'three';
-import { Html, Text } from '@react-three/drei';
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import { MONITOR_DIMENSIONS } from '@/app/constants';
-import { SubmitButton } from '@/components/three';
+import { GuestbookInputs } from '@/components/three';
+import { useAtomValue } from 'jotai';
+import { guestbookInputContentAtom } from '@/app/atoms/appAtoms';
 
 const Screen = ({ direction }: { direction: string }) => {
-  const [text, setText] = useState('');
+  const inputContent = useAtomValue(guestbookInputContentAtom);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const textureRef = useRef<THREE.CanvasTexture | null>(null);
 
@@ -46,15 +41,15 @@ const Screen = ({ direction }: { direction: string }) => {
         context.fillStyle = '#ffffff'; // 흰색 배경
         context.fillRect(0, 0, canvas.width, canvas.height);
         context.fillStyle = '#000000'; // 검은 텍스트
-        context.font = '24px Arial';
-        context.fillText(text, 30, 130);
+        context.font = '40px Arial';
+        context.fillText(inputContent, 30, 60);
 
         if (textureRef.current) {
           textureRef.current.needsUpdate = true;
         }
       }
     }
-  }, [text]);
+  }, [inputContent]);
 
   useLayoutEffect(() => {
     initializeCanvas();
@@ -62,7 +57,7 @@ const Screen = ({ direction }: { direction: string }) => {
 
   useEffect(() => {
     updateTexture();
-  }, [text, updateTexture]);
+  }, [inputContent, updateTexture]);
 
   return (
     <>
@@ -85,7 +80,7 @@ const Screen = ({ direction }: { direction: string }) => {
           }
         />
         <meshBasicMaterial
-          key={text}
+          key={inputContent}
           map={textureRef.current || undefined}
           //   toneMapped={false}
         />
@@ -105,51 +100,7 @@ const Screen = ({ direction }: { direction: string }) => {
         <lineBasicMaterial color='black' />
       </lineSegments>
 
-      {/* 가로 모니터 입력창*/}
-      {direction === 'row' && (
-        <>
-          <Text position={[0, 0.6, 0.04]} fontSize={0.1} color='black'>
-            안녕하세요! 반갑습니다 ^___^
-          </Text>
-          <Html position={[0, -0.4, 0]} scale={0.25} transform>
-            <textarea
-              value={text}
-              placeholder='방명록을 남겨주세요'
-              onChange={(e) => setText(e.target.value)}
-              style={{
-                width: `450px`,
-                height: '110px',
-                padding: '20px',
-                border: 'none',
-                borderRadius: '4px',
-                fontSize: '20px',
-                resize: 'none',
-              }}
-            />
-          </Html>
-          <SubmitButton text={text} />
-        </>
-      )}
-
-      {/* 세로 모니터 입력창*/}
-      {direction === 'col' && (
-        <Html position={[-1, -0.01, 0]} scale={0.25} transform>
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            style={{
-              width: `240px`,
-              height: '110px',
-              padding: '8px',
-              border: 'none',
-              borderRadius: '4px',
-              fontSize: '20px',
-              transform: `rotate(90deg)`,
-              resize: 'none',
-            }}
-          />
-        </Html>
-      )}
+      <GuestbookInputs direction={direction} />
     </>
   );
 };
