@@ -23,16 +23,14 @@ export const getSortedPostsData = () => {
 
     // metadata 파싱
     const matterResult = matter(fileContents);
-
-    const dateStr = matterResult.data.date;
-    const [year, month, day] = dateStr.split('-');
-    matterResult.data.formattedDate = `${year}년 ${month}월 ${day}일`;
+    const formattedDate = formatDate(matterResult.data.date);
 
     const slug = matterResult.data.title.toLowerCase().replace(/\s+/g, '-');
 
     return {
       id,
       slug,
+      formattedDate,
       ...matterResult.data,
     };
   }) as Post[];
@@ -70,12 +68,15 @@ export const getPostDetailById = async (id: string): Promise<Post> => {
     tags: string[];
   };
 
+  const formattedDate = formatDate(datas.date);
+
   // 마크다운 to HTML
   const contentHtml = await parseMarkdownToHtml(matterResult.content);
 
   return {
     id,
     contentHtml,
+    formattedDate,
     ...datas,
   };
 };
@@ -95,4 +96,10 @@ const parseMarkdownToHtml = async (markdownContent: string) => {
     .process(processedContent.toString());
 
   return highlightedContent.toString();
+};
+
+const formatDate = (dateStr: string) => {
+  if (!dateStr) return '';
+  const [year, month, day] = dateStr.split('-');
+  return `${year}년 ${month}월 ${day}일`;
 };
