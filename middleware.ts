@@ -17,10 +17,9 @@ export async function middleware(request: NextRequest) {
     try {
       response.cookies.set(VISIT_KEY, currentDate, {
         httpOnly: true,
-        sameSite: 'strict',
+        sameSite: 'lax',
         secure: process.env.NODE_ENV === 'production',
       });
-      console.log('>>>>>');
 
       await fetch(`${request.nextUrl.origin}/api/visit`, {
         method: 'POST',
