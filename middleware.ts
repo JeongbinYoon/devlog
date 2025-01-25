@@ -4,7 +4,9 @@ export async function middleware(request: NextRequest) {
   const VISIT_KEY = 'lastVisitDate';
   const lastVisitCookie = request.cookies.get(VISIT_KEY);
   const lastVisitDate = lastVisitCookie?.value;
-  const currentDate = new Date().toISOString().split('T')[0];
+  const now = new Date();
+  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+  const currentDate = now.toISOString().split('T')[0];
 
   const response = NextResponse.next();
 
