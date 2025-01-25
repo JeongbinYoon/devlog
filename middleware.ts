@@ -1,47 +1,40 @@
-import { incrementVisitCount } from '@/lib/count';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function middleware(req) {
-  const VISIT_KEY = 'lastVisit';
-  const VISIT_INTERVAL = 10000; // 5초 (테스트 용)
+export async function middleware(request: NextRequest) {
+  const VISIT_KEY = 'lastVisitDate';
+  const lastVisitCookie = request.cookies.get(VISIT_KEY);
+  const lastVisitDate = lastVisitCookie?.value;
+  const currentDate = new Date().toISOString().split('T')[0];
 
-  const res = NextResponse.next();
-  const lastVisit = req.cookies.get(VISIT_KEY);
-  const currentTime = Date.now();
+  const response = NextResponse.next();
 
-  if (!lastVisit) {
-    // 쿠키가 없으면 방문 기록을 증가시킴
-  } else {
+  // 요청이 HTML 문서인 경우만 실행
+  const isHtmlRequest = request.headers.get('accept')?.includes('text/html');
+  if (!isHtmlRequest) return response;
+
+  // 쿠키 정보로 해당 날짜 방문 여부 판단 후 업데이트
+  if (!lastVisitDate || currentDate > lastVisitDate) {
     try {
-      const lastVisitTime = Number(JSON.parse(lastVisit.value)); // 쿠키 값을 숫자로 변환
+      response.cookies.set(VISIT_KEY, currentDate, {
+        httpOnly: true,
+        sameSite: 'strict',
+        secure: process.env.NODE_ENV === 'production',
+      });
+      console.log('>>>>>');
 
-      // 쿠키 만료 시 방문 기록을 증가시킴
-      if (currentTime - lastVisitTime > VISIT_INTERVAL) {
-        console.log('만료 시간 지남. 방문 기록을 증가.');
-        await incrementVisitCount(req.nextUrl.pathname);
-      } else {
-        console.log('방문 기록 증가 없이 쿠키 유지');
-      }
+      await fetch(`${request.nextUrl.origin}/api/visit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ date: currentDate }),
+      });
     } catch (error) {
-      console.error('Error processing lastVisit cookie:', error);
+      console.error('Route Handler 호출 오류:', error);
     }
+
+    return response;
   }
 
-  // 쿠키가 만료된 경우만 새 쿠키 설정
-  const newExpires = currentTime + VISIT_INTERVAL;
-
-  // 쿠키가 만료된 경우 새 쿠키 설정
-  //   if (!lastVisit || currentTime - Number(lastVisit) > VISIT_INTERVAL) {
-  console.log('새 쿠키 설정:', newExpires);
-
-  // 쿠키 설정 (httpOnly, secure 등 옵션 설정)
-  res.cookies.set(VISIT_KEY, newExpires.toString(), {
-    httpOnly: true,
-    sameSite: 'strict',
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: VISIT_INTERVAL / 1000,
-  });
-  //   }
-
-  return res;
+  return response;
 }
