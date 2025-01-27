@@ -29,11 +29,11 @@ export async function middleware(request: NextRequest) {
     try {
       response.cookies.set(VISIT_KEY, currentDate, {
         httpOnly: true,
-        sameSite: 'lax',
+        sameSite: 'none',
         secure: process.env.NODE_ENV === 'production',
       });
 
-      await fetch(`${request.nextUrl.origin}/api/visit`, {
+      fetch(`${request.nextUrl.origin}/api/visit`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
