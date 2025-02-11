@@ -9,6 +9,7 @@ import PrevNextButton from './PrevNextButton';
 import PrevNextPostButtons from './PrevNextPostButtons';
 import ProgressBar from './ProgressBar';
 import SideBar from './SideBar';
+import VisitTracker from './VisitTracker';
 
 export {
   Comments,
@@ -22,4 +23,5 @@ export {
   PrevNextPostButtons,
   ProgressBar,
   SideBar,
+  VisitTracker,
 };
