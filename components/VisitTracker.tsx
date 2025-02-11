@@ -9,7 +9,12 @@ const VisitTracker = () => {
   const pathName = usePathname();
 
   useEffect(() => {
-    const currentDate = new Date().toISOString().split('T')[0];
+    const now = new Date();
+    const koreaTime = new Date(now.getTime() + 9 * 60 * 60 * 1000); // UTC → KST 변환
+    const currentDate = `${koreaTime.getFullYear()}-${String(
+      koreaTime.getMonth() + 1
+    ).padStart(2, '0')}-${String(koreaTime.getDate()).padStart(2, '0')}`;
+
     const lastVisitDate = getCookie(VISIT_KEY);
 
     const expiryDate = new Date();
