@@ -11,9 +11,9 @@ const VisitTracker = () => {
   useEffect(() => {
     const now = new Date();
     const koreaTime = new Date(now.getTime() + 9 * 60 * 60 * 1000); // UTC → KST 변환
-    const currentDate = `${koreaTime.getFullYear()}-${String(
-      koreaTime.getMonth() + 1
-    ).padStart(2, '0')}-${String(koreaTime.getDate()).padStart(2, '0')}`;
+    const currentDate = `${koreaTime.getUTCFullYear()}-${String(
+      koreaTime.getUTCMonth() + 1
+    ).padStart(2, '0')}-${String(koreaTime.getUTCDate()).padStart(2, '0')}`;
 
     const lastVisitDate = getCookie(VISIT_KEY);
 
