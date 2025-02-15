@@ -18,6 +18,7 @@ const VisitTracker = () => {
     const lastVisitDate = getCookie(VISIT_KEY);
 
     const expiryDate = new Date();
+    expiryDate.setDate(expiryDate.getDate() + 1); // 1일 후
     expiryDate.setUTCHours(15, 0, 0, 0); // UTC 기준으로 한국(KST) 자정 설정
 
     if (!lastVisitDate || currentDate > lastVisitDate) {
