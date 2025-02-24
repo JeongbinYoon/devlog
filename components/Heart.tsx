@@ -14,6 +14,7 @@ import { HeartSVG } from '@/components';
 import { MAX_LIKES_CLICK_COUNT } from '@/app/constants';
 import { countUp, getCount } from '@/app/blog/[slug]/actions';
 import { usePathname } from 'next/navigation';
+import { getCookie, setCookie } from 'cookies-next';
 
 interface HeartProps {
   postId: string;
@@ -61,6 +62,7 @@ const Heart = ({ postId }: HeartProps) => {
       }, 500);
 
       countUp({ postId });
+      setLikesCountCookie(newCount);
       return newCount;
     });
 
@@ -87,9 +89,18 @@ const Heart = ({ postId }: HeartProps) => {
     onStartBubbleEffect();
   }, []);
 
+  const setLikesCountCookie = (count: number) => {
+    const key = `${postId}-likes`;
+    setCookie(key, count, {
+      expires: new Date(Date.now() + 60 * 60 * 1000),
+      sameSite: 'lax',
+    });
+  };
+
   useEffect(() => {
-    setClickCount(0);
-  }, [pathName, setClickCount]);
+    const count = getCookie(`${postId}-likes`);
+    setClickCount(count ? Number(count) : 0);
+  }, [postId, pathName, setClickCount]);
 
   useEffect(() => {
     getLikesCount();
