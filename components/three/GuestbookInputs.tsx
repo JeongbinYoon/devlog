@@ -40,7 +40,7 @@ const GuestbookInputs = ({ direction }: { direction: string }) => {
           occlude='blending'
         ></Html>
         <Html
-          position={[-0.93, -0.27, 0.04]}
+          position={[-1.05, -0.28, 0.04]}
           scale={0.25}
           transform
           occlude='blending'
@@ -52,15 +52,15 @@ const GuestbookInputs = ({ direction }: { direction: string }) => {
             onFocus={() => setIsInputFocus(true)}
             onBlur={() => setIsInputFocus(false)}
             style={{
-              width: `135px`,
-              height: '42px',
+              width: `100px`,
+              height: '45px',
               padding: '10px',
               ...commonStyles,
             }}
           />
         </Html>
         <Html
-          position={[-0.93, -0.57, 0.04]}
+          position={[-1.05, -0.6, 0.04]}
           scale={0.25}
           transform
           occlude='blending'
@@ -73,15 +73,15 @@ const GuestbookInputs = ({ direction }: { direction: string }) => {
             onFocus={() => setIsInputFocus(true)}
             onBlur={() => setIsInputFocus(false)}
             style={{
-              width: `135px`,
-              height: '42px',
+              width: `100px`,
+              height: '45px',
               padding: '10px',
               ...commonStyles,
             }}
           />
         </Html>
         <Html
-          position={[0.45, -0.44, 0.04]}
+          position={[0.35, -0.44, 0.04]}
           scale={0.25}
           transform
           occlude='blending'
@@ -93,7 +93,7 @@ const GuestbookInputs = ({ direction }: { direction: string }) => {
             onFocus={() => setIsInputFocus(true)}
             onBlur={() => setIsInputFocus(false)}
             style={{
-              width: `295px`,
+              width: `330px`,
               height: '90px',
               padding: '10px',
               ...commonStyles,
