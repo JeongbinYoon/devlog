@@ -71,10 +71,10 @@ const SpeechBubbleList = () => {
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
     >
-      {entries.map(({ content }, index) => (
+      {entries.map((entry, index) => (
         <SpeechBubble
-          key={index}
-          text={content}
+          key={entry.id}
+          entry={entry}
           position={[6.5, 11 - index * 1.5, -7.35]}
         />
       ))}
