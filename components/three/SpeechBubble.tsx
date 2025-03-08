@@ -8,6 +8,8 @@ import {
   ClockIcon,
   PencilIcon,
 } from '@heroicons/react/24/outline';
+import { useSetAtom } from 'jotai';
+import { isOpenedVerifyPasswordAtom } from '@/app/atoms';
 
 interface SpeechBubbleProps {
   entry: GuestbookEntry;
@@ -18,6 +20,7 @@ const SpeechBubble = ({ entry, position }: SpeechBubbleProps) => {
   const groupRef = useRef<THREE.Group>(null);
   const worldPositionY = useRef(0);
   const [isShow, setIsShow] = useState(false);
+  const setIsOpenedVerifyPassword = useSetAtom(isOpenedVerifyPasswordAtom);
 
   const date = new Date(entry.createdAt);
   const formattedDate = date
@@ -73,81 +76,90 @@ const SpeechBubble = ({ entry, position }: SpeechBubbleProps) => {
   }, [textWidth, textHeight]);
 
   return (
-    <group ref={groupRef} position={position}>
-      {isShow && (
-        <>
-          <lineSegments position={[-textWidth / 2, 0.8, 0]}>
-            <edgesGeometry args={[new THREE.ShapeGeometry(shape)]} />
-            <lineBasicMaterial color='black' />
-          </lineSegments>
+    <>
+      <group ref={groupRef} position={position}>
+        {isShow && (
+          <>
+            <lineSegments position={[-textWidth / 2, 0.8, 0]}>
+              <edgesGeometry args={[new THREE.ShapeGeometry(shape)]} />
+              <lineBasicMaterial color='black' />
+            </lineSegments>
 
-          {/* 작성자 */}
-          <Text
-            position={[-textWidth + 0.2, 1.05, 0.01]}
-            fontSize={0.13}
-            color='#333'
-            anchorX='left'
-          >
-            {entry.name}
-          </Text>
+            {/* 작성자 */}
+            <Text
+              position={[-textWidth + 0.2, 1.05, 0.01]}
+              fontSize={0.13}
+              color='#333'
+              anchorX='left'
+            >
+              {entry.name}
+            </Text>
 
-          {/* 댓글 내용 */}
-          <Text
-            position={[-textWidth + 0.2, 0.9, 0.01]}
-            fontSize={0.2}
-            color='black'
-            anchorX='left'
-            anchorY='top'
-            lineHeight={1}
-          >
-            {entry.content}
-          </Text>
+            {/* 댓글 내용 */}
+            <Text
+              position={[-textWidth + 0.2, 0.9, 0.01]}
+              fontSize={0.2}
+              color='black'
+              anchorX='left'
+              anchorY='top'
+              lineHeight={1}
+            >
+              {entry.content}
+            </Text>
 
-          {/* 댓글 생성일 */}
-          <Html
-            position={[-textWidth + 0.25, 0.5 - textHeight, 0]}
-            scale={0.25}
-            transform
-          >
-            <ClockIcon className='size-4' style={{ color: '#777' }} />
-          </Html>
-          <Text
-            position={[-textWidth + 0.33, 0.5 - textHeight, 0.01]}
-            fontSize={0.13}
-            color='#777'
-            anchorX='left'
-          >
-            {formattedDate}
-          </Text>
+            {/* 댓글 생성일 */}
+            <Html
+              position={[-textWidth + 0.25, 0.5 - textHeight, 0]}
+              scale={0.25}
+              transform
+              occlude='blending'
+            >
+              <ClockIcon className='size-4 -z-10' style={{ color: '#777' }} />
+            </Html>
+            <Text
+              position={[-textWidth + 0.33, 0.5 - textHeight, 0.01]}
+              fontSize={0.13}
+              color='#777'
+              anchorX='left'
+              occlude='blending'
+            >
+              {formattedDate}
+            </Text>
 
-          {/* 편집,답글 버튼 */}
-          <Html position={[-0.4, 0.51 - textHeight, 0]} scale={0.25} transform>
-            <div className='flex gap-1'>
-              <button
-                style={{
-                  padding: '5px',
-                  // background: '#f3f3f3',
-                  color: '#777',
-                  cursor: 'pointer',
-                }}
-              >
-                <PencilIcon className='size-6' />
-              </button>
-              <button
-                style={{
-                  padding: '5px',
-                  // background: '#ccc',
-                  color: '#777',
-                  cursor: 'pointer',
-                }}
-              >
-                <ChatBubbleLeftRightIcon className='size-6' />
-              </button>
-            </div>
-          </Html>
-        </>
-      )}
-    </group>
+            {/* 편집,답글 버튼 */}
+            <Html
+              position={[-0.4, 0.51 - textHeight, 0]}
+              scale={0.25}
+              transform
+              occlude='blending'
+            >
+              <div className='flex gap-1'>
+                <button
+                  onClick={() => setIsOpenedVerifyPassword(true)}
+                  style={{
+                    padding: '5px',
+                    color: '#777',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <PencilIcon className='size-6' />
+                </button>
+                <button
+                  onClick={() => setIsOpenedVerifyPassword(true)}
+                  style={{
+                    padding: '5px',
+                    color: '#777',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <ChatBubbleLeftRightIcon className='size-6' />
+                </button>
+              </div>
+            </Html>
+          </>
+        )}
+      </group>
+    </>
   );
 };
 

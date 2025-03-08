@@ -11,6 +11,7 @@ import Screen from '@/components/three/Screen';
 import SpeechBubble from '@/components/three/SpeechBubble';
 import SpeechBubbleList from '@/components/three/SpeechBubbleList';
 import SubmitButton from '@/components/three/SubmitButton';
+import VerifyPassword from '@/components/three/VerifyPassword';
 import Wall from '@/components/three/Wall';
 
 export {
@@ -27,5 +28,6 @@ export {
   SpeechBubble,
   SpeechBubbleList,
   SubmitButton,
+  VerifyPassword,
   Wall,
 };

@@ -8,13 +8,15 @@ import {
   Laptop,
   Monitor,
   SpeechBubbleList,
+  VerifyPassword,
   Wall,
 } from '@/components/three';
 import { useAtomValue } from 'jotai';
-import { orbitEnabledAtom } from '@/app/atoms/appAtoms';
+import { isOpenedVerifyPasswordAtom, orbitEnabledAtom } from '@/app/atoms';
 
 const Scene = () => {
   const orbitEnabled = useAtomValue(orbitEnabledAtom);
+  const isOpenedVerifyPassword = useAtomValue(isOpenedVerifyPasswordAtom);
 
   return (
     <Canvas
@@ -30,6 +32,7 @@ const Scene = () => {
       {/* Room */}
       <Wall position={[0, 7.35, -7.35]} rotation={[0, 0, 0]} />
       <SpeechBubbleList />
+      {isOpenedVerifyPassword && <VerifyPassword />}
       <GradientPlane />
 
       <Wall position={[-7.35, 7.35, 0]} rotation={[0, Math.PI / 2, 0]} />
