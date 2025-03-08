@@ -1,5 +1,5 @@
 import { Html } from '@react-three/drei';
-import { useEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import { useAtom, useSetAtom } from 'jotai';
 import {
   guestbookInputUserNameAtom,
@@ -9,7 +9,11 @@ import {
 } from '@/app/atoms/appAtoms';
 import { addGuestbookEntry } from '@/app/guestbook/actions';
 
-const SubmitButton = () => {
+interface SubmitButtonProps {
+  inputNameRef: RefObject<HTMLInputElement | null>;
+  inputContentRef: RefObject<HTMLTextAreaElement | null>;
+}
+const SubmitButton = ({ inputNameRef, inputContentRef }: SubmitButtonProps) => {
   const [isShowSubmitButton, setIsShowSubmitButton] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const timeoutRef = useRef<number | null>(null); // 타이머 관리
@@ -30,6 +34,12 @@ const SubmitButton = () => {
       setInputUserName('');
       setInputPassword('');
       setInputContent('');
+      if (inputNameRef.current) {
+        inputNameRef.current.value = '';
+      }
+      if (inputContentRef.current) {
+        inputContentRef.current.value = '';
+      }
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message || '등록 중 오류가 발생했습니다.');

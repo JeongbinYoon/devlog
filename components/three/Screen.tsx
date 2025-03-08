@@ -42,7 +42,13 @@ const Screen = ({ direction }: { direction: string }) => {
         context.fillRect(0, 0, canvas.width, canvas.height);
         context.fillStyle = '#000000'; // 검은 텍스트
         context.font = '40px Arial';
-        context.fillText(inputContent, 30, 60);
+
+        const lineHeight = 50; // 줄간격 설정
+        const lines = inputContent.split('\n'); // 줄바꿈 기준으로 분할
+
+        lines.forEach((line, index) => {
+          context.fillText(line, 30, 60 + index * lineHeight);
+        });
 
         if (textureRef.current) {
           textureRef.current.needsUpdate = true;
