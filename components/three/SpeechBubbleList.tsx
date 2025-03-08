@@ -71,13 +71,21 @@ const SpeechBubbleList = () => {
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
     >
-      {entries.map((entry, index) => (
-        <SpeechBubble
-          key={entry.id}
-          entry={entry}
-          position={[6.5, 11 - index * 1.5, -7.35]}
-        />
-      ))}
+      {entries.map((entry, index, arr) => {
+        // 직전 글까지 글의 높이 계산하여 다음 글 position 계산
+        const total = arr.slice(0, index).reduce((acc, cur) => {
+          const lineLength = cur.content.trim().split('\n').length;
+          const textHeight = lineLength > 1 ? lineLength * 0.15 : 0;
+          return (acc += textHeight);
+        }, 0);
+        return (
+          <SpeechBubble
+            key={entry.id}
+            entry={entry}
+            position={[6.5, 11 - index * 1.5 - total, -7.35]}
+          />
+        );
+      })}
     </group>
   );
 };
