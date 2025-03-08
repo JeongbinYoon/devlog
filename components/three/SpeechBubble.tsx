@@ -42,7 +42,9 @@ const SpeechBubble = ({ entry, position }: SpeechBubbleProps) => {
 
   // 텍스트 길이에 따라 말풍선 길이 계산 (문자당 0.2)
   const textWidth = useMemo(() => {
-    const textLength = entry.content.length;
+    const textLength = Math.max(
+      ...entry.content.split('\n').map((el) => el.length)
+    );
     return Math.max(2.5, textLength * 0.2 + 0.2);
   }, [entry.content]);
 
