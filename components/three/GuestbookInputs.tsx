@@ -1,12 +1,13 @@
-import { SubmitButton } from '@/components/three';
-import { useAtom, useSetAtom } from 'jotai';
+import { SubmitButton, VerifyPassword } from '@/components/three';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
   guestbookInputUserNameAtom,
   guestbookInputPasswordAtom,
   guestbookInputContentAtom,
 } from '@/app/atoms/appAtoms';
 import { Html } from '@react-three/drei';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { isOpenedVerifyPasswordAtom } from '@/app/atoms';
 
 const GuestbookInputs = ({ direction }: { direction: string }) => {
   const [inputContent, setInputContent] = useAtom(guestbookInputContentAtom);
@@ -15,6 +16,7 @@ const GuestbookInputs = ({ direction }: { direction: string }) => {
   const [occludeKey, setOccludeKey] = useState(0); // occlude 초기화 키값
   const [isInputFocus, setIsInputFocus] = useState(false);
   const lastKeyRef = useRef<string | null>(null);
+  const isOpenedVerifyPassword = useAtomValue(isOpenedVerifyPasswordAtom);
 
   const commonStyles: React.CSSProperties = {
     border: 'none',
@@ -76,81 +78,99 @@ const GuestbookInputs = ({ direction }: { direction: string }) => {
     setInputContent(parsedContent);
   };
 
+  const resetInputs = useCallback(() => {
+    setInputContent('');
+    setInputUserName('');
+    setInputPassword('');
+  }, [setInputContent, setInputPassword, setInputUserName]);
+
+  useEffect(() => {
+    if (isOpenedVerifyPassword) {
+      resetInputs();
+    }
+  }, [isOpenedVerifyPassword, resetInputs]);
+
   return (
     // 가로 모니터 입력창
     direction === 'row' ? (
       <>
-        <Html
-          position={[-9999, 0, 0]}
-          key={occludeKey}
-          occlude='blending'
-        ></Html>
-        <Html
-          position={[-1.05, -0.28, 0.04]}
-          scale={0.25}
-          transform
-          occlude='blending'
-        >
-          <input
-            ref={inputNameRef}
-            placeholder='이름'
-            onChange={(e) => setInputUserName(e.target.value)}
-            onFocus={() => setIsInputFocus(true)}
-            onBlur={() => setIsInputFocus(false)}
-            style={{
-              width: `100px`,
-              height: '45px',
-              padding: '10px',
-              ...commonStyles,
-            }}
-          />
-        </Html>
-        <Html
-          position={[-1.05, -0.6, 0.04]}
-          scale={0.25}
-          transform
-          occlude='blending'
-        >
-          <input
-            type='password'
-            value={inputPassword}
-            placeholder='비밀번호'
-            onChange={(e) => setInputPassword(e.target.value)}
-            onFocus={() => setIsInputFocus(true)}
-            onBlur={() => setIsInputFocus(false)}
-            style={{
-              width: `100px`,
-              height: '45px',
-              padding: '10px',
-              ...commonStyles,
-            }}
-          />
-        </Html>
-        <Html
-          position={[0.35, -0.44, 0.04]}
-          scale={0.25}
-          transform
-          occlude='blending'
-        >
-          <textarea
-            ref={inputContentRef}
-            placeholder='방명록을 남겨주세요'
-            onKeyDown={handleKeyDown}
-            onChange={handleContents}
-            onFocus={() => setIsInputFocus(true)}
-            onBlur={() => setIsInputFocus(false)}
-            style={{
-              width: `330px`,
-              height: '90px',
-              padding: '10px',
-              ...commonStyles,
-            }}
-          />
-        </Html>
-        <SubmitButton
-          inputNameRef={inputNameRef}
-          inputContentRef={inputContentRef}
-        />
+        {isOpenedVerifyPassword ? (
+          <VerifyPassword />
+        ) : (
+          <>
+            <Html
+              position={[-9999, 0, 0]}
+              key={occludeKey}
+              occlude='blending'
+            ></Html>
+            <Html
+              position={[-1.05, -0.28, 0.04]}
+              scale={0.25}
+              transform
+              occlude='blending'
+            >
+              <input
+                ref={inputNameRef}
+                placeholder='이름'
+                onChange={(e) => setInputUserName(e.target.value)}
+                onFocus={() => setIsInputFocus(true)}
+                onBlur={() => setIsInputFocus(false)}
+                style={{
+                  width: `100px`,
+                  height: '45px',
+                  padding: '10px',
+                  ...commonStyles,
+                }}
+              />
+            </Html>
+            <Html
+              position={[-1.05, -0.6, 0.04]}
+              scale={0.25}
+              transform
+              occlude='blending'
+            >
+              <input
+                type='password'
+                value={inputPassword}
+                placeholder='비밀번호'
+                onChange={(e) => setInputPassword(e.target.value)}
+                onFocus={() => setIsInputFocus(true)}
+                onBlur={() => setIsInputFocus(false)}
+                style={{
+                  width: `100px`,
+                  height: '45px',
+                  padding: '10px',
+                  ...commonStyles,
+                }}
+              />
+            </Html>
+            <Html
+              position={[0.35, -0.44, 0.04]}
+              scale={0.25}
+              transform
+              occlude='blending'
+            >
+              <textarea
+                ref={inputContentRef}
+                placeholder='방명록을 남겨주세요'
+                onKeyDown={handleKeyDown}
+                onChange={handleContents}
+                onFocus={() => setIsInputFocus(true)}
+                onBlur={() => setIsInputFocus(false)}
+                style={{
+                  width: `330px`,
+                  height: '90px',
+                  padding: '10px',
+                  ...commonStyles,
+                }}
+              />
+            </Html>
+            <SubmitButton
+              inputNameRef={inputNameRef}
+              inputContentRef={inputContentRef}
+            />
+          </>
+        )}
       </>
     ) : // 세로 모니터 입력창
     // <Html position={[-1, -0.01, 0]} scale={0.25} transform>
