@@ -1,12 +1,15 @@
 import * as THREE from 'three';
 import { Html, Text } from '@react-three/drei';
-import { useRef } from 'react';
-import { useSetAtom } from 'jotai';
-import { isOpenedVerifyPasswordAtom } from '@/app/atoms';
+import { useRef, useState } from 'react';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { isOpenedVerifyPasswordAtom, selectedEntryAtom } from '@/app/atoms';
+import { verifyEntryPassword } from '@/app/guestbook/actions';
 
 const VerifyPassword = () => {
   const popupRef = useRef<THREE.Group>(null);
   const setIsOpenedVerifyPassword = useSetAtom(isOpenedVerifyPasswordAtom);
+  const selectedEntry = useAtomValue(selectedEntryAtom);
+  const [inputPassword, setInputPassword] = useState('');
 
   const buttonStyle = {
     padding: '10px 30px',
@@ -30,6 +33,19 @@ const VerifyPassword = () => {
     setIsOpenedVerifyPassword(false);
   };
 
+  const handleVerifyPassword = async () => {
+    if (!inputPassword) {
+      alert('비밀번호를 입력해주세요.');
+      return;
+    }
+    if (selectedEntry) {
+      const result = await verifyEntryPassword({
+        entryId: selectedEntry.id,
+        inputPassword,
+      });
+      if (!result) alert('비밀번호가 틀렸습니다.');
+    }
+  };
   return (
     <group ref={popupRef}>
       <Text
@@ -50,6 +66,7 @@ const VerifyPassword = () => {
       >
         <input
           type='password'
+          onChange={(e) => setInputPassword(e.target.value)}
           style={{
             ...commonStyles,
             width: '230px',
@@ -77,7 +94,12 @@ const VerifyPassword = () => {
         transform
         occlude='blending'
       >
-        <button style={{ ...buttonStyle, background: '#ccc' }}>확인</button>
+        <button
+          onClick={handleVerifyPassword}
+          style={{ ...buttonStyle, background: '#ccc' }}
+        >
+          확인
+        </button>
       </Html>
     </group>
   );

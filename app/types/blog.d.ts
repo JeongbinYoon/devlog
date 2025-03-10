@@ -28,6 +28,7 @@ export interface KeyBoardData {
 
 export interface GuestbookEntry {
   id: string;
+  hashedPassword: string;
   name: string;
   content: string;
   createdAt: Date;

@@ -8,8 +8,8 @@ import {
   ClockIcon,
   PencilIcon,
 } from '@heroicons/react/24/outline';
-import { useSetAtom } from 'jotai';
-import { isOpenedVerifyPasswordAtom } from '@/app/atoms';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { isOpenedVerifyPasswordAtom, selectedEntryAtom } from '@/app/atoms';
 
 interface SpeechBubbleProps {
   entry: GuestbookEntry;
@@ -21,6 +21,8 @@ const SpeechBubble = ({ entry, position }: SpeechBubbleProps) => {
   const worldPositionY = useRef(0);
   const [isShow, setIsShow] = useState(false);
   const setIsOpenedVerifyPassword = useSetAtom(isOpenedVerifyPasswordAtom);
+  const setSelectedEntry = useSetAtom(selectedEntryAtom);
+  const selectedEntry = useAtomValue(selectedEntryAtom);
 
   const date = new Date(entry.createdAt);
   const formattedDate = date
@@ -74,6 +76,11 @@ const SpeechBubble = ({ entry, position }: SpeechBubbleProps) => {
 
     return bubbleShape;
   }, [textWidth, textHeight]);
+
+  const handleOpenVerifyPassword = () => {
+    setIsOpenedVerifyPassword(true);
+    setSelectedEntry(entry);
+  };
 
   return (
     <>
@@ -135,7 +142,7 @@ const SpeechBubble = ({ entry, position }: SpeechBubbleProps) => {
             >
               <div className='flex gap-1'>
                 <button
-                  onClick={() => setIsOpenedVerifyPassword(true)}
+                  onClick={handleOpenVerifyPassword}
                   style={{
                     padding: '5px',
                     color: '#777',

@@ -21,8 +21,8 @@ model Like {
 
 model GuestbookEntry {
   id          String   @id @default(cuid())
-  name        String   
   hashedPassword String 
+  name        String   
   content     String  
   createdAt   DateTime @default(now())
 }
