@@ -36,15 +36,6 @@ const SpeechBubble = ({ entry, position }: SpeechBubbleProps) => {
     })
     .replace(/\. /g, '.');
 
-  useFrame(() => {
-    if (groupRef.current) {
-      const worldPosition = new THREE.Vector3();
-      groupRef.current.getWorldPosition(worldPosition);
-      worldPositionY.current = worldPosition.y;
-      setIsShow(worldPosition.y < 13 && worldPosition.y > 1);
-    }
-  });
-
   // 텍스트 길이에 따라 말풍선 길이 계산 (문자당 0.2)
   const textWidth = useMemo(() => {
     const textLength = Math.max(
@@ -57,6 +48,41 @@ const SpeechBubble = ({ entry, position }: SpeechBubbleProps) => {
   const textHeight = useMemo(() => {
     return lineLength > 1 ? lineLength * 0.15 : 0;
   }, [lineLength]);
+
+  const absolutePosition = new THREE.Vector3(
+    0 + textWidth / 2,
+    6 + textHeight,
+    -1
+  ); // 목표 위치
+  useFrame(() => {
+    if (groupRef.current) {
+      // 벽 경계 밖으로 나는 경우 씬에서 제거
+      const worldPosition = new THREE.Vector3();
+      groupRef.current.getWorldPosition(worldPosition);
+      worldPositionY.current = worldPosition.y;
+      setIsShow(worldPosition.y < 13 && worldPosition.y > 1);
+
+      const currentPosition = groupRef.current.position;
+      if (selectedEntry?.id === entry.id) {
+        // 부모 영향을 제거한 '절대 위치'를 목표 위치로 설정
+        const targetPosition = absolutePosition.clone();
+
+        // 현재 위치도 월드 기준으로 가져와야 부모 영향을 안 받음
+        const currentWorldPosition = new THREE.Vector3();
+        groupRef.current.getWorldPosition(currentWorldPosition);
+
+        // '월드 기준'으로 보간 적용
+        currentWorldPosition.lerp(targetPosition, 0.1);
+
+        // 그룹의 '로컬 위치'를 조정해서 부모 영향을 제거
+        groupRef.current.position.copy(
+          currentWorldPosition.sub(worldPosition).add(groupRef.current.position)
+        );
+      } else {
+        currentPosition.lerp(new THREE.Vector3(...position), 0.1);
+      }
+    }
+  });
 
   // 말풍선(본체 + 꼬리)
   const shape = useMemo(() => {
@@ -91,6 +117,12 @@ const SpeechBubble = ({ entry, position }: SpeechBubbleProps) => {
               <edgesGeometry args={[new THREE.ShapeGeometry(shape)]} />
               <lineBasicMaterial color='black' />
             </lineSegments>
+            {selectedEntry?.id === entry.id && (
+              <mesh position={[-textWidth / 2, 0.8, -0.01]}>
+                <shapeGeometry args={[shape]} />
+                <meshBasicMaterial color='white' toneMapped={false} />
+              </mesh>
+            )}
 
             {/* 작성자 */}
             <Text

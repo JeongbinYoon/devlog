@@ -1,14 +1,14 @@
 import * as THREE from 'three';
 import { Html, Text } from '@react-three/drei';
-import { useRef, useState } from 'react';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useAtom, useSetAtom } from 'jotai';
 import { isOpenedVerifyPasswordAtom, selectedEntryAtom } from '@/app/atoms';
 import { verifyEntryPassword } from '@/app/guestbook/actions';
 
 const VerifyPassword = () => {
   const popupRef = useRef<THREE.Group>(null);
   const setIsOpenedVerifyPassword = useSetAtom(isOpenedVerifyPasswordAtom);
-  const selectedEntry = useAtomValue(selectedEntryAtom);
+  const [selectedEntry, setSelectedEntry] = useAtom(selectedEntryAtom);
   const [inputPassword, setInputPassword] = useState('');
 
   const buttonStyle = {
@@ -29,9 +29,10 @@ const VerifyPassword = () => {
     resize: 'none',
   };
 
-  const handleCloseVerifyPassword = () => {
+  const handleCloseVerifyPassword = useCallback(() => {
     setIsOpenedVerifyPassword(false);
-  };
+    setSelectedEntry(null);
+  }, [setIsOpenedVerifyPassword, setSelectedEntry]);
 
   const handleVerifyPassword = async () => {
     if (!inputPassword) {
@@ -46,6 +47,13 @@ const VerifyPassword = () => {
       if (!result) alert('비밀번호가 틀렸습니다.');
     }
   };
+
+  useEffect(() => {
+    if (!selectedEntry) {
+      handleCloseVerifyPassword();
+    }
+  }, [selectedEntry, handleCloseVerifyPassword]);
+
   return (
     <group ref={popupRef}>
       <Text

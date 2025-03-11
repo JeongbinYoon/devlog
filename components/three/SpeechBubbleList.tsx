@@ -2,7 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { SpeechBubble } from '@/components/three';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { lastAddedEntryAtom, orbitEnabledAtom } from '@/app/atoms/appAtoms';
+import {
+  lastAddedEntryAtom,
+  orbitEnabledAtom,
+  selectedEntryAtom,
+} from '@/app/atoms/appAtoms';
 import { ThreeEvent } from '@react-three/fiber';
 import { getGuestbookEntries } from '@/app/guestbook/actions';
 import { GuestbookEntry } from '@/app/types/blog';
@@ -14,6 +18,7 @@ const SpeechBubbleList = () => {
   const [lastMouseY, setLastMouseY] = useState(0);
   const [entries, setEntries] = useState<GuestbookEntry[]>([]);
   const lastAddedEntry = useAtomValue(lastAddedEntryAtom);
+  const setSelectedEntry = useSetAtom(selectedEntryAtom);
 
   const getGuestBookEntries = async () => {
     const data = await getGuestbookEntries();
@@ -39,6 +44,9 @@ const SpeechBubbleList = () => {
         groupRef.current.position.y -= deltaY * 0.005; // 이동 거리만큼 그룹 위치 업데이트
         setLastMouseY(event.clientY);
         setOrbitEnabled(false); // OrbitControls 비활성화
+      }
+      if (Math.abs(deltaY) > 20 && Math.abs(deltaY) < 100) {
+        setSelectedEntry(null);
       }
     }
   };
