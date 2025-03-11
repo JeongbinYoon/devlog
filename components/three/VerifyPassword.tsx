@@ -14,7 +14,7 @@ const VerifyPassword = () => {
   const setIsOpenedVerifyPassword = useSetAtom(isOpenedVerifyPasswordAtom);
   const [selectedEntry, setSelectedEntry] = useAtom(selectedEntryAtom);
   const [inputPassword, setInputPassword] = useState('');
-  const [isEditingEntry, setIsEditingEntry] = useAtom(isEditingEntryAtom);
+  const setIsEditingEntry = useSetAtom(isEditingEntryAtom);
 
   const buttonStyle = {
     padding: '10px 30px',

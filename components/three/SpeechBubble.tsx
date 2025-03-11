@@ -9,7 +9,12 @@ import {
   PencilIcon,
 } from '@heroicons/react/24/outline';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { isOpenedVerifyPasswordAtom, selectedEntryAtom } from '@/app/atoms';
+import {
+  isEditingEntryAtom,
+  isOpenedVerifyPasswordAtom,
+  selectedEntryAtom,
+} from '@/app/atoms';
+import EditingCircle from '@/components/three/EditingCircle';
 
 interface SpeechBubbleProps {
   entry: GuestbookEntry;
@@ -23,6 +28,7 @@ const SpeechBubble = ({ entry, position }: SpeechBubbleProps) => {
   const setIsOpenedVerifyPassword = useSetAtom(isOpenedVerifyPasswordAtom);
   const setSelectedEntry = useSetAtom(selectedEntryAtom);
   const selectedEntry = useAtomValue(selectedEntryAtom);
+  const isEditingEntry = useAtomValue(isEditingEntryAtom);
 
   const date = new Date(entry.createdAt);
   const formattedDate = date
@@ -195,6 +201,10 @@ const SpeechBubble = ({ entry, position }: SpeechBubbleProps) => {
                 </button>
               </div>
             </Html>
+
+            {isEditingEntry && selectedEntry?.id === entry.id && (
+              <EditingCircle position={[-0.1, 1.2, 0.04]} />
+            )}
           </>
         )}
       </group>

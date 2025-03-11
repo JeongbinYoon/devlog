@@ -1,4 +1,5 @@
 import Desk from '@/components/three/Desk';
+import EditingCircle from '@/components/three/EditingCircle';
 import Floor from '@/components/three/Floor';
 import GradientPlane from '@/components/three/GradientPlane';
 import GuestbookInputs from '@/components/three/GuestbookInputs';
@@ -16,6 +17,7 @@ import Wall from '@/components/three/Wall';
 
 export {
   Desk,
+  EditingCircle,
   Floor,
   GradientPlane,
   GuestbookInputs,

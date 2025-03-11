@@ -1,4 +1,8 @@
-import { SubmitButton, VerifyPassword } from '@/components/three';
+import {
+  EditingCircle,
+  SubmitButton,
+  VerifyPassword,
+} from '@/components/three';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
   guestbookInputUserNameAtom,
@@ -153,27 +157,27 @@ const GuestbookInputs = ({ direction }: { direction: string }) => {
               />
             </Html>
             {isEditingEntry && selectedEntry ? null : (
-            <Html
-              position={[-1.05, -0.6, 0.04]}
-              scale={0.25}
-              transform
-              occlude='blending'
-            >
-              <input
-                type='password'
-                value={inputPassword}
-                placeholder='비밀번호'
-                onChange={(e) => setInputPassword(e.target.value)}
-                onFocus={() => setIsInputFocus(true)}
-                onBlur={() => setIsInputFocus(false)}
-                style={{
-                  width: `100px`,
-                  height: '45px',
-                  padding: '10px',
-                  ...commonStyles,
-                }}
-              />
-            </Html>
+              <Html
+                position={[-1.05, -0.6, 0.04]}
+                scale={0.25}
+                transform
+                occlude='blending'
+              >
+                <input
+                  type='password'
+                  value={inputPassword}
+                  placeholder='비밀번호'
+                  onChange={(e) => setInputPassword(e.target.value)}
+                  onFocus={() => setIsInputFocus(true)}
+                  onBlur={() => setIsInputFocus(false)}
+                  style={{
+                    width: `100px`,
+                    height: '45px',
+                    padding: '10px',
+                    ...commonStyles,
+                  }}
+                />
+              </Html>
             )}
             <Html
               position={[0.35, -0.44, 0.04]}
@@ -218,6 +222,9 @@ const GuestbookInputs = ({ direction }: { direction: string }) => {
               inputNameRef={inputNameRef}
               inputContentRef={inputContentRef}
             />
+            {isEditingEntry && selectedEntry && (
+              <EditingCircle position={[1.35, 0.7, 0.04]} />
+            )}
           </>
         )}
       </>
