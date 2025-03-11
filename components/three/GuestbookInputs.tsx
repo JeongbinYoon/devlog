@@ -4,6 +4,8 @@ import {
   guestbookInputUserNameAtom,
   guestbookInputPasswordAtom,
   guestbookInputContentAtom,
+  isEditingEntryAtom,
+  selectedEntryAtom,
 } from '@/app/atoms/appAtoms';
 import { Html } from '@react-three/drei';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -17,6 +19,8 @@ const GuestbookInputs = ({ direction }: { direction: string }) => {
   const [isInputFocus, setIsInputFocus] = useState(false);
   const lastKeyRef = useRef<string | null>(null);
   const isOpenedVerifyPassword = useAtomValue(isOpenedVerifyPasswordAtom);
+  const [isEditingEntry, setIsEditingEntry] = useAtom(isEditingEntryAtom);
+  const [selectedEntry, setSelectedEntry] = useAtom(selectedEntryAtom);
 
   const commonStyles: React.CSSProperties = {
     border: 'none',
@@ -90,6 +94,30 @@ const GuestbookInputs = ({ direction }: { direction: string }) => {
     }
   }, [isOpenedVerifyPassword, resetInputs]);
 
+  useEffect(() => {
+    if (isEditingEntry && selectedEntry) {
+      setInputContent(selectedEntry.content);
+      setInputUserName(selectedEntry.name);
+      setTimeout(() => {
+        if (inputContentRef.current && inputNameRef.current) {
+          inputContentRef.current.value = selectedEntry.content;
+          inputNameRef.current.value = selectedEntry.name;
+        }
+      }, 100);
+    }
+  }, [selectedEntry, isEditingEntry, setInputContent, setInputUserName]);
+
+  useEffect(() => {
+    if (!isEditingEntry) {
+      resetInputs();
+      setSelectedEntry(null);
+      if (inputContentRef.current && inputNameRef.current) {
+        inputContentRef.current.value = '';
+        inputNameRef.current.value = '';
+      }
+    }
+  }, [isEditingEntry, resetInputs, setSelectedEntry]);
+
   return (
     // 가로 모니터 입력창
     direction === 'row' ? (
@@ -103,6 +131,7 @@ const GuestbookInputs = ({ direction }: { direction: string }) => {
               key={occludeKey}
               occlude='blending'
             ></Html>
+
             <Html
               position={[-1.05, -0.28, 0.04]}
               scale={0.25}
@@ -123,6 +152,7 @@ const GuestbookInputs = ({ direction }: { direction: string }) => {
                 }}
               />
             </Html>
+            {isEditingEntry && selectedEntry ? null : (
             <Html
               position={[-1.05, -0.6, 0.04]}
               scale={0.25}
@@ -144,6 +174,7 @@ const GuestbookInputs = ({ direction }: { direction: string }) => {
                 }}
               />
             </Html>
+            )}
             <Html
               position={[0.35, -0.44, 0.04]}
               scale={0.25}
@@ -165,6 +196,24 @@ const GuestbookInputs = ({ direction }: { direction: string }) => {
                 }}
               />
             </Html>
+            {isEditingEntry && selectedEntry && (
+              <Html position={[-0.6, -1, 0]} scale={0.25} transform>
+                <button
+                  onClick={() => setIsEditingEntry(false)}
+                  style={{
+                    padding: '10px 20px',
+                    fontSize: '14px',
+                    background: '#f3f3f3',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.05)',
+                  }}
+                >
+                  취소
+                </button>
+              </Html>
+            )}
             <SubmitButton
               inputNameRef={inputNameRef}
               inputContentRef={inputContentRef}

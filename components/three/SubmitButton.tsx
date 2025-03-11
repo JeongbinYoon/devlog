@@ -1,13 +1,18 @@
 import { Html } from '@react-three/drei';
 import { RefObject, useEffect, useRef, useState } from 'react';
-import { useAtom, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
   guestbookInputUserNameAtom,
   guestbookInputPasswordAtom,
   guestbookInputContentAtom,
   lastAddedEntryAtom,
+  isEditingEntryAtom,
+  selectedEntryAtom,
 } from '@/app/atoms/appAtoms';
-import { addGuestbookEntry } from '@/app/guestbook/actions';
+import {
+  addGuestbookEntry,
+  updateGuestbookEntry,
+} from '@/app/guestbook/actions';
 
 interface SubmitButtonProps {
   inputNameRef: RefObject<HTMLInputElement | null>;
@@ -23,7 +28,22 @@ const SubmitButton = ({ inputNameRef, inputContentRef }: SubmitButtonProps) => {
   const [inputPassword, setInputPassword] = useAtom(guestbookInputPasswordAtom);
   const setLastAddedEntry = useSetAtom(lastAddedEntryAtom);
 
-  const onSubmit = async () => {
+  const [isEditingEntry, setIsEditingEntry] = useAtom(isEditingEntryAtom);
+  const selectedEntry = useAtomValue(selectedEntryAtom);
+
+  const resetInputs = () => {
+    setInputUserName('');
+    setInputPassword('');
+    setInputContent('');
+    if (inputNameRef.current) {
+      inputNameRef.current.value = '';
+    }
+    if (inputContentRef.current) {
+      inputContentRef.current.value = '';
+    }
+  };
+
+  const handleAddEntry = async () => {
     try {
       const result = await addGuestbookEntry({
         inputContent,
@@ -31,15 +51,7 @@ const SubmitButton = ({ inputNameRef, inputContentRef }: SubmitButtonProps) => {
         inputPassword,
       });
       setLastAddedEntry(result);
-      setInputUserName('');
-      setInputPassword('');
-      setInputContent('');
-      if (inputNameRef.current) {
-        inputNameRef.current.value = '';
-      }
-      if (inputContentRef.current) {
-        inputContentRef.current.value = '';
-      }
+      resetInputs();
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message || '등록 중 오류가 발생했습니다.');
@@ -47,6 +59,35 @@ const SubmitButton = ({ inputNameRef, inputContentRef }: SubmitButtonProps) => {
         console.log('알 수 없는 오류', error);
       }
     }
+  };
+  const handleUpdateEntry = async () => {
+    if (selectedEntry) {
+      try {
+        const result = await updateGuestbookEntry({
+          entryId: selectedEntry.id,
+          inputContent,
+          inputUserName,
+        });
+        if (result) {
+          alert('수정이 완료되었습니다.');
+          setIsEditingEntry(false);
+        }
+        setLastAddedEntry(result);
+        resetInputs();
+      } catch (error) {
+        if (error instanceof Error) {
+          alert(error.message || '등록 중 오류가 발생했습니다.');
+        } else {
+          console.log('알 수 없는 오류', error);
+        }
+      }
+    }
+  };
+
+  const onSubmit = async () => {
+    if (isEditingEntry) handleUpdateEntry();
+    else handleAddEntry();
+
     setIsShowSubmitButton(false);
   };
 
@@ -66,7 +107,7 @@ const SubmitButton = ({ inputNameRef, inputContentRef }: SubmitButtonProps) => {
         500
       );
     }
-  }, [inputContent]);
+  }, [inputContent, isEditingEntry, selectedEntry]);
 
   // 타이머 정리
   useEffect(() => {
@@ -95,7 +136,7 @@ const SubmitButton = ({ inputNameRef, inputContentRef }: SubmitButtonProps) => {
             transition: 'opacity 500ms, transform 500ms',
           }}
         >
-          작성 완료
+          {isEditingEntry && selectedEntry ? '수정' : '작성'} 완료
         </button>
       </Html>
     )

@@ -2,7 +2,11 @@ import * as THREE from 'three';
 import { Html, Text } from '@react-three/drei';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAtom, useSetAtom } from 'jotai';
-import { isOpenedVerifyPasswordAtom, selectedEntryAtom } from '@/app/atoms';
+import {
+  isEditingEntryAtom,
+  isOpenedVerifyPasswordAtom,
+  selectedEntryAtom,
+} from '@/app/atoms';
 import { verifyEntryPassword } from '@/app/guestbook/actions';
 
 const VerifyPassword = () => {
@@ -10,6 +14,7 @@ const VerifyPassword = () => {
   const setIsOpenedVerifyPassword = useSetAtom(isOpenedVerifyPasswordAtom);
   const [selectedEntry, setSelectedEntry] = useAtom(selectedEntryAtom);
   const [inputPassword, setInputPassword] = useState('');
+  const [isEditingEntry, setIsEditingEntry] = useAtom(isEditingEntryAtom);
 
   const buttonStyle = {
     padding: '10px 30px',
@@ -29,10 +34,15 @@ const VerifyPassword = () => {
     resize: 'none',
   };
 
-  const handleCloseVerifyPassword = useCallback(() => {
-    setIsOpenedVerifyPassword(false);
-    setSelectedEntry(null);
-  }, [setIsOpenedVerifyPassword, setSelectedEntry]);
+  const handleCloseVerifyPassword = useCallback(
+    (resetSelectedEntry = true) => {
+      setIsOpenedVerifyPassword(false);
+      if (resetSelectedEntry) {
+        setSelectedEntry(null);
+      }
+    },
+    [setIsOpenedVerifyPassword, setSelectedEntry]
+  );
 
   const handleVerifyPassword = async () => {
     if (!inputPassword) {
@@ -44,7 +54,12 @@ const VerifyPassword = () => {
         entryId: selectedEntry.id,
         inputPassword,
       });
-      if (!result) alert('비밀번호가 틀렸습니다.');
+      if (!result) {
+        alert('비밀번호가 틀렸습니다.');
+        return;
+      }
+      setIsEditingEntry(true);
+      handleCloseVerifyPassword(false);
     }
   };
 
@@ -92,7 +107,7 @@ const VerifyPassword = () => {
         transform
         occlude='blending'
       >
-        <button onClick={handleCloseVerifyPassword} style={buttonStyle}>
+        <button onClick={() => handleCloseVerifyPassword()} style={buttonStyle}>
           취소
         </button>
       </Html>

@@ -59,6 +59,45 @@ export const addGuestbookEntry = async ({
   }
 };
 
+export const updateGuestbookEntry = async ({
+  entryId,
+  inputUserName,
+  inputContent,
+}: {
+  entryId: string;
+  inputUserName: string;
+  inputContent: string;
+}) => {
+  if (!entryId || !inputUserName || !inputContent) {
+    throw new Error('모든 필드를 입력해야 합니다.');
+  }
+
+  try {
+    // 기존 방명록 글 찾기
+    const existingEntry = await prisma.guestbookEntry.findUnique({
+      where: { id: entryId },
+    });
+
+    if (!existingEntry) {
+      throw new Error('존재하지 않는 방명록 글입니다.');
+    }
+
+    // 이름과 내용 업데이트 (비밀번호 제외)
+    const updatedEntry = await prisma.guestbookEntry.update({
+      where: { id: entryId },
+      data: {
+        name: inputUserName,
+        content: inputContent,
+      },
+    });
+
+    return updatedEntry;
+  } catch (error) {
+    console.error('방명록 업데이트 중 오류 발생:', error);
+    throw new Error('방명록 업데이트 중 오류가 발생했습니다.');
+  }
+};
+
 interface verifyEntryPassword {
   entryId: string;
   inputPassword: string;

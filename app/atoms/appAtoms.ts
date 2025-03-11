@@ -7,3 +7,4 @@ export const guestbookInputUserNameAtom = atom('');
 export const guestbookInputPasswordAtom = atom('');
 export const lastAddedEntryAtom = atom<null | GuestbookEntry>(null);
 export const selectedEntryAtom = atom<null | GuestbookEntry>(null);
+export const isEditingEntryAtom = atom(false);

@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { SpeechBubble } from '@/components/three';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
+  isEditingEntryAtom,
   lastAddedEntryAtom,
   orbitEnabledAtom,
   selectedEntryAtom,
@@ -19,6 +20,7 @@ const SpeechBubbleList = () => {
   const [entries, setEntries] = useState<GuestbookEntry[]>([]);
   const lastAddedEntry = useAtomValue(lastAddedEntryAtom);
   const setSelectedEntry = useSetAtom(selectedEntryAtom);
+  const setIsEditingEntry = useSetAtom(isEditingEntryAtom);
 
   const getGuestBookEntries = async () => {
     const data = await getGuestbookEntries();
@@ -47,6 +49,7 @@ const SpeechBubbleList = () => {
       }
       if (Math.abs(deltaY) > 20 && Math.abs(deltaY) < 100) {
         setSelectedEntry(null);
+        setIsEditingEntry(false);
       }
     }
   };
