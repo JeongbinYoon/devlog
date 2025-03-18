@@ -98,6 +98,20 @@ export const updateGuestbookEntry = async ({
   }
 };
 
+export const deleteGuestbookEntry = async (entryId: string) => {
+  try {
+    // 해당 ID의 방명록 글을 찾고 삭제
+    const deletedEntry = await prisma.guestbookEntry.delete({
+      where: { id: entryId },
+    });
+
+    return deletedEntry;
+  } catch (error) {
+    console.error('방명록 삭제 중 오류 발생:', error);
+    throw new Error('방명록 삭제 중 오류가 발생했습니다.');
+  }
+};
+
 interface verifyEntryPassword {
   entryId: string;
   inputPassword: string;

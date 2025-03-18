@@ -119,7 +119,7 @@ const SubmitButton = ({ inputNameRef, inputContentRef }: SubmitButtonProps) => {
   }, []);
   return (
     isShowSubmitButton && (
-      <Html position={[0, -1, 0]} scale={0.25} transform>
+      <Html position={[0, -1, 0]} scale={0.25} transform occlude='blending'>
         <button
           onClick={onSubmit}
           style={{

@@ -10,10 +10,12 @@ import {
   guestbookInputContentAtom,
   isEditingEntryAtom,
   selectedEntryAtom,
+  lastAddedEntryAtom,
 } from '@/app/atoms/appAtoms';
 import { Html } from '@react-three/drei';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { isOpenedVerifyPasswordAtom } from '@/app/atoms';
+import { deleteGuestbookEntry } from '@/app/guestbook/actions';
 
 const GuestbookInputs = ({ direction }: { direction: string }) => {
   const [inputContent, setInputContent] = useAtom(guestbookInputContentAtom);
@@ -25,6 +27,7 @@ const GuestbookInputs = ({ direction }: { direction: string }) => {
   const isOpenedVerifyPassword = useAtomValue(isOpenedVerifyPasswordAtom);
   const [isEditingEntry, setIsEditingEntry] = useAtom(isEditingEntryAtom);
   const [selectedEntry, setSelectedEntry] = useAtom(selectedEntryAtom);
+  const setLastAddedEntry = useSetAtom(lastAddedEntryAtom);
 
   const commonStyles: React.CSSProperties = {
     border: 'none',
@@ -96,6 +99,26 @@ const GuestbookInputs = ({ direction }: { direction: string }) => {
     setInputUserName('');
     setInputPassword('');
   }, [setInputContent, setInputPassword, setInputUserName]);
+
+  const onDelete = async () => {
+    if (selectedEntry) {
+      const confirmed = confirm('방명록을 삭제하시겠습니까?');
+      if (!confirmed) return;
+
+      try {
+        const result = await deleteGuestbookEntry(selectedEntry.id);
+        setLastAddedEntry(result);
+        resetInputs();
+        setIsEditingEntry(false);
+      } catch (error) {
+        if (error instanceof Error) {
+          alert(error.message || '삭제 중 오류가 발생했습니다.');
+        } else {
+          console.log('알 수 없는 오류', error);
+        }
+      }
+    }
+  };
 
   useEffect(() => {
     if (isOpenedVerifyPassword) {
@@ -206,7 +229,12 @@ const GuestbookInputs = ({ direction }: { direction: string }) => {
               />
             </Html>
             {isEditingEntry && selectedEntry && (
-              <Html position={[-0.6, -1, 0]} scale={0.25} transform>
+              <Html
+                position={[-0.6, -1, 0]}
+                scale={0.25}
+                transform
+                occlude='blending'
+              >
                 <button
                   onClick={() => setIsEditingEntry(false)}
                   style={{
@@ -227,6 +255,29 @@ const GuestbookInputs = ({ direction }: { direction: string }) => {
               inputNameRef={inputNameRef}
               inputContentRef={inputContentRef}
             />
+            {isEditingEntry && selectedEntry && (
+              <Html
+                position={[0.6, -1, 0]}
+                scale={0.25}
+                transform
+                occlude='blending'
+              >
+                <button
+                  onClick={onDelete}
+                  style={{
+                    padding: '10px 20px',
+                    fontSize: '14px',
+                    background: '#f3f3f3',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.05)',
+                  }}
+                >
+                  삭제
+                </button>
+              </Html>
+            )}
             {isEditingEntry && selectedEntry && (
               <EditingCircle position={[1.35, 0.7, 0.04]} />
             )}
