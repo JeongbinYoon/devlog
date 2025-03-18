@@ -55,35 +55,40 @@ const GuestbookInputs = ({ direction }: { direction: string }) => {
   };
 
   const handleContents = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    let text = e.target.value.trim();
-    if (text.length > 100 && lastKeyRef.current !== 'Backspace') {
+    const text = e.target.value.trim();
+    const parsedContent = insertNewlineEvery28(text);
+    let result = parsedContent;
+    if (parsedContent.length > 100 && lastKeyRef.current !== 'Backspace') {
       alert('100자 이상 입력할 수 없습니다.');
-      text = text.slice(0, 100);
+      result = parsedContent.slice(0, 100);
       if (inputContentRef.current) {
-        inputContentRef.current.value = text;
+        inputContentRef.current.value = result;
       }
     }
 
-    const lines = inputContent.split('\n').length;
+    const lines = parsedContent.split('\n').length;
+
     if (
-      text &&
+      parsedContent &&
       (lines > 4 || (lines === 4 && lastKeyRef.current === 'Enter')) &&
       lastKeyRef.current !== 'Backspace'
     ) {
       alert('5줄 이상 입력할 수 없습니다.');
 
       if (lastKeyRef.current === 'Enter') {
-        text = text.trim();
+        result =
+          parsedContent.trim()?.length > 4
+            ? inputContent
+            : parsedContent.trim();
       } else {
-        text = insertNewlineEvery28(text)?.split('\n').splice(0, 4).join('\n');
+        result = parsedContent.split('\n').splice(0, 4).join('\n');
       }
       if (inputContentRef.current) {
-        inputContentRef.current.value = text;
+        inputContentRef.current.value = result;
       }
     }
 
-    const parsedContent = insertNewlineEvery28(text);
-    setInputContent(parsedContent);
+    setInputContent(result);
   };
 
   const resetInputs = useCallback(() => {

@@ -29,6 +29,6 @@ model GuestbookEntry {
   id          String   @id @default(cuid())
   hashedPassword String 
   name        String   
-  content     String  
+  content     String   @db.VarChar(100)
   createdAt   DateTime @default(now())
 }
