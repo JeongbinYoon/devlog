@@ -19,6 +19,12 @@ model Like {
   count   Int      @default(0)
 }
 
+model VisitCount {
+  id      Int      @id @default(autoincrement())
+  date    String   @unique
+  count   Int      @default(0)
+}
+
 model GuestbookEntry {
   id          String   @id @default(cuid())
   hashedPassword String 

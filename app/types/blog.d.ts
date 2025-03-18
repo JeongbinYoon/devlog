@@ -3,6 +3,7 @@ export interface Post {
   title: string;
   slug?: string;
   date: string;
+  formattedDate: string;
   tags: string[];
   contentHtml: string;
 }

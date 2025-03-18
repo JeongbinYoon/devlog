@@ -11,7 +11,7 @@ const Comments = () => {
       category='Comments'
       categoryId='DIC_kwDONcX1H84ClZYw'
       mapping='pathname'
-      reactionsEnabled='1'
+      reactionsEnabled='0'
       emitMetadata='0'
       inputPosition='top'
       theme='light'

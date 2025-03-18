@@ -1,5 +1,5 @@
 import { getPostDetailBySlug, getSortedPostsData } from '@/lib/posts';
-import { Comments, Likes, PrevNextPosts } from '@/components';
+import { Comments, Likes, PrevNextPostButtons } from '@/components';
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -14,7 +14,7 @@ const PostDetailPage = async ({ params }: Params) => {
     id = '',
     title = '',
     contentHtml = '',
-    date = '',
+    formattedDate = '',
     prevPost,
     nextPost,
   } = (await getPostDetailBySlug(decodeURIComponent(slug))) || {};
@@ -26,7 +26,7 @@ const PostDetailPage = async ({ params }: Params) => {
       <div className='mx-5 md:mx-auto mt-12 mb-24 max-w-3xl'>
         <div className='mb-7'>
           <h2 className='text-4xl font-bold mb-5'>{title}</h2>
-          <span className='text-gray-500'>{date}</span>
+          <span className='text-gray-500'>{formattedDate}</span>
           <section className='prose md:prose-md max-w-3xl mt-10'>
             <div dangerouslySetInnerHTML={{ __html: contentHtml }} />
           </section>
@@ -34,7 +34,7 @@ const PostDetailPage = async ({ params }: Params) => {
         <div className='lg:hidden block'>
           <Likes postId={id} />
         </div>
-        <PrevNextPosts posts={{ prevPost, nextPost }} />
+        <PrevNextPostButtons posts={{ prevPost, nextPost }} />
         <Comments />
       </div>
     </article>

@@ -5,9 +5,11 @@ import Heart from './Heart';
 import HeartSVG from './HeartSVG';
 import Likes from './Likes';
 import Nav from './Nav';
-import PrevNextPosts from './PrevNextPosts';
+import PrevNextButton from './PrevNextButton';
+import PrevNextPostButtons from './PrevNextPostButtons';
 import ProgressBar from './ProgressBar';
 import SideBar from './SideBar';
+import VisitTracker from './VisitTracker';
 
 export {
   Comments,
@@ -17,7 +19,9 @@ export {
   HeartSVG,
   Likes,
   Nav,
-  PrevNextPosts,
+  PrevNextButton,
+  PrevNextPostButtons,
   ProgressBar,
   SideBar,
+  VisitTracker,
 };
