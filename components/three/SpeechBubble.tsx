@@ -4,7 +4,7 @@ import { useMemo, useRef, useState } from 'react';
 import { GuestbookEntry, Vector3 } from '@/app/types/blog';
 import { useFrame } from '@react-three/fiber';
 import {
-  ChatBubbleLeftRightIcon,
+  // ChatBubbleLeftRightIcon,
   ClockIcon,
   PencilIcon,
 } from '@heroicons/react/24/outline';
@@ -173,7 +173,7 @@ const SpeechBubble = ({ entry, position }: SpeechBubbleProps) => {
 
             {/* 편집,답글 버튼 */}
             <Html
-              position={[-0.4, 0.51 - textHeight, 0]}
+              position={[-0.25, 0.51 - textHeight, 0]}
               scale={0.25}
               transform
               occlude='blending'
@@ -189,7 +189,7 @@ const SpeechBubble = ({ entry, position }: SpeechBubbleProps) => {
                 >
                   <PencilIcon className='size-6' />
                 </button>
-                <button
+                {/* <button
                   onClick={() => setIsOpenedVerifyPassword(true)}
                   style={{
                     padding: '5px',
@@ -198,7 +198,7 @@ const SpeechBubble = ({ entry, position }: SpeechBubbleProps) => {
                   }}
                 >
                   <ChatBubbleLeftRightIcon className='size-6' />
-                </button>
+                </button> */}
               </div>
             </Html>
 
