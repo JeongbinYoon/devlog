@@ -42,6 +42,11 @@ code {
   content: '';
 }
 
+[data-highlighted-line] {
+  @apply bg-gray-700 block w-[calc(100%+2rem)] -ml-4 px-4;
+  /* w-[calc(100%+2rem)] = pre의 padding만큼 더 넓힘, -ml-2 = 왼쪽 마진 조정 */
+}
+
 h1,
 h2,
 h3,

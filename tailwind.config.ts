@@ -6,6 +6,12 @@ export default {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  safelist: [
+    {
+      pattern: /data-highlighted-line/,
+      variants: ['before', 'after'],
+    },
+  ],
   theme: {
     extend: {
       colors: {

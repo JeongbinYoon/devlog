@@ -2,13 +2,13 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { remark } from 'remark';
-import html from 'remark-html';
-import { Post } from '@/app/types/blog';
-import { rehype } from 'rehype';
-import rehypePrism from 'rehype-prism-plus';
 import remarkGfm from 'remark-gfm';
 import remarkToc from 'remark-toc';
+import remarkRehype from 'remark-rehype';
 import rehypeSlug from 'rehype-slug';
+import rehypeStringify from 'rehype-stringify';
+import rehypePrettyCode from 'rehype-pretty-code';
+import { Post } from '@/app/types/blog';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
@@ -16,15 +16,11 @@ export const getSortedPostsData = () => {
   const fileNames = fs.readdirSync(postsDirectory);
   const allPostsData = fileNames.map((fileName) => {
     const id = fileName.replace(/\.md$/, '');
-
-    // 마크다운 파일 읽기
     const fullPath = path.join(postsDirectory, fileName);
     const fileContents = fs.readFileSync(fullPath, 'utf8');
 
-    // metadata 파싱
     const matterResult = matter(fileContents);
     const formattedDate = formatDate(matterResult.data.date);
-
     const slug = matterResult.data.title.toLowerCase().replace(/\s+/g, '-');
 
     return {
@@ -35,7 +31,6 @@ export const getSortedPostsData = () => {
     };
   }) as Post[];
 
-  // 날짜 순 정렬
   return allPostsData.sort((a, b) => (a.date < b.date ? 1 : -1));
 };
 
@@ -86,16 +81,16 @@ const parseMarkdownToHtml = async (markdownContent: string) => {
   const processedContent = await remark()
     .use(remarkGfm) // GitHub Flavored Markdown 지원
     .use(remarkToc, { heading: '목차' }) // 목차 생성
-    .use(html)
+    .use(remarkRehype)
+    .use(rehypeSlug)
+    .use(rehypePrettyCode, {
+      theme: 'one-dark-pro',
+      keepBackground: false,
+    })
+    .use(rehypeStringify)
     .process(markdownContent);
 
-  // 2. HTML 변환된 내용에 슬러그와 코드 하이라이트 추가
-  const highlightedContent = await rehype()
-    .use(rehypeSlug) // 헤더에 고유 id 추가
-    .use(rehypePrism) // 코드 하이라이트 추가
-    .process(processedContent.toString());
-
-  return highlightedContent.toString();
+  return processedContent.toString();
 };
 
 const formatDate = (dateStr: string) => {
