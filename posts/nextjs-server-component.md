@@ -1,8 +1,8 @@
 ---
 title: 'Next.js에서 서버 컴포넌트를 렌더링하는 방법'
-date: '2025-2-7'
+date: '2025-02-07'
 tags: ['Next.js', 'Server component', '서버 컴포넌트', '서버 컴포넌트 렌더링']
-published: true
+published: false
 ---
 
 ## 목차

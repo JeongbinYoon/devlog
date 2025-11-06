@@ -102,6 +102,8 @@ const parseMarkdownToHtml = async (markdownContent: string) => {
 
 const formatDate = (dateStr: string) => {
   if (!dateStr) return '';
-  const [year, month, day] = dateStr.split('-');
+  const [year, month, day] = dateStr
+    .split('-')
+    .map((item) => item.replace(/^0/g, ''));
   return `${year}년 ${month}월 ${day}일`;
 };
