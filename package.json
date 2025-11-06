@@ -16,7 +16,7 @@
     "@react-three/drei": "^9.120.5",
     "@react-three/fiber": "9.0.0-alpha.8",
     "@tailwindcss/typography": "^0.5.15",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.3",
     "cookies-next": "^5.1.0",
     "gray-matter": "^4.0.3",
     "jotai": "^2.10.3",

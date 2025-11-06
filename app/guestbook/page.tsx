@@ -1,12 +1,8 @@
-'use client';
+import { GuestbookClient } from '@/components';
+import { getGuestbookEntries } from './actions';
 
-import { Scene } from '@/components/three';
-
-const GuestbookPage = () => {
-  return (
-    <div style={{ width: '100vw', height: '100vh' }}>
-      <Scene />
-    </div>
-  );
-};
+async function GuestbookPage() {
+  const entries = await getGuestbookEntries();
+  return <GuestbookClient entries={entries} />;
+}
 export default GuestbookPage;
