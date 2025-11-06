@@ -13,6 +13,7 @@ tags:
     'DOM 기반 XSS',
     'WebGoat',
   ]
+published: true
 ---
 
 ## 목차

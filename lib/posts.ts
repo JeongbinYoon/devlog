@@ -14,22 +14,28 @@ const postsDirectory = path.join(process.cwd(), 'posts');
 
 export const getSortedPostsData = () => {
   const fileNames = fs.readdirSync(postsDirectory);
-  const allPostsData = fileNames.map((fileName) => {
-    const id = fileName.replace(/\.md$/, '');
-    const fullPath = path.join(postsDirectory, fileName);
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
+  const allPostsData = fileNames
+    .map((fileName) => {
+      const id = fileName.replace(/\.md$/, '');
+      const fullPath = path.join(postsDirectory, fileName);
+      const fileContents = fs.readFileSync(fullPath, 'utf8');
 
-    const matterResult = matter(fileContents);
-    const formattedDate = formatDate(matterResult.data.date);
-    const slug = matterResult.data.title.toLowerCase().replace(/\s+/g, '-');
+      const matterResult = matter(fileContents);
 
-    return {
-      id,
-      slug,
-      formattedDate,
-      ...matterResult.data,
-    };
-  }) as Post[];
+      const isPublished = matterResult.data?.published;
+      if (!isPublished) return null;
+
+      const formattedDate = formatDate(matterResult.data.date);
+      const slug = matterResult.data.title.toLowerCase().replace(/\s+/g, '-');
+
+      return {
+        id,
+        slug,
+        formattedDate,
+        ...matterResult.data,
+      };
+    })
+    .filter(Boolean) as Post[];
 
   return allPostsData.sort((a, b) => (a.date < b.date ? 1 : -1));
 };
@@ -61,6 +67,7 @@ export const getPostDetailById = async (id: string): Promise<Post> => {
     title: string;
     date: string;
     tags: string[];
+    published?: boolean;
   };
 
   const formattedDate = formatDate(datas.date);

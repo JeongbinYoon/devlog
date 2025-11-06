@@ -2,6 +2,7 @@
 title: 'React 19.2에서의 새로운 기능!'
 date: '2025-10-17'
 tags: ['React 19.2', 'React conf']
+published: true
 ---
 
 ## 목차
