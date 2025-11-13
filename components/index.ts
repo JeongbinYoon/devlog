@@ -1,6 +1,8 @@
 import Comments from './Giscus';
-import GuestbookClassic from './GuestbookClassic';
 import Guestbook3D from './Guestbook3D';
+import GuestbookClassic from './GuestbookClassic';
+import GuestbookClassicList from './GuestbookClassicList';
+import GuestbookClassicWrite from './GuestbookClassicWrite';
 import GuestbookClient from './GuestbookClient';
 import Header from './Header';
 import HeaderTools from './HeaderTools';
@@ -16,8 +18,10 @@ import VisitTracker from './VisitTracker';
 
 export {
   Comments,
-  GuestbookClassic,
   Guestbook3D,
+  GuestbookClassic,
+  GuestbookClassicList,
+  GuestbookClassicWrite,
   GuestbookClient,
   Header,
   HeaderTools,
