@@ -1,5 +1,6 @@
 import Duolingo from './Duolingo';
 import Flag from './Flag';
+import Footer from './Footer';
 import Comments from './Giscus';
 import Guestbook3D from './Guestbook3D';
 import GuestbookClassic from './GuestbookClassic';
@@ -22,6 +23,7 @@ export {
   Comments,
   Duolingo,
   Flag,
+  Footer,
   Guestbook3D,
   GuestbookClassic,
   GuestbookClassicList,

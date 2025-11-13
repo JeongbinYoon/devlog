@@ -5,18 +5,8 @@ import Link from 'next/link';
 const BlogPage = async () => {
   const allPostsData = getSortedPostsData();
 
-  const fetchDuolingoData = async () => {
-    const res = await fetch(
-      `https://www.duolingo.com/2017-06-30/users?username=${process.env.DUOLINGO_ID}`
-    );
-    const json = await res.json();
-    return json?.users?.[0];
-  };
-
-  const duolingoUserData = await fetchDuolingoData();
-
   return (
-    <div className="max-w-3xl mx-auto mt-12 px-5 md:px-0">
+    <div className="w-full max-w-3xl mx-auto mt-12 px-5 md:px-0">
       <ul className="flex flex-col gap-8">
         {allPostsData.map(({ id, title, slug, formattedDate }) => (
           <li key={id}>
@@ -27,7 +17,6 @@ const BlogPage = async () => {
           </li>
         ))}
       </ul>
-      {duolingoUserData && <Duolingo userData={duolingoUserData} />}
     </div>
   );
 };

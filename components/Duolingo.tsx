@@ -23,28 +23,27 @@ export default function Duolingo({ userData: data }: DuolingoProps) {
   }, [data, setTsStreakExtendedToday]);
 
   return (
-    <div>
-      {data && (
-        <div className="w-40">
-          <div className="flex justify-between items-center">
-            <FireIcon
-              className="size-5 transition-colors duration-700"
-              color={isStreakExtendedToday ? 'orange' : 'gray'}
-            />
-            <span className="text-gray-700">{data.streak} Daily streak</span>
-          </div>
-          <ul>
-            {data.courses.map(({ id, learningLanguage, title, xp }: any) => {
-              return (
-                <li key={id} className="flex justify-between items-center">
-                  <Flag code={learningLanguage} alt={title} />
-                  <span className="text-gray-700">{xp}xp</span>
-                </li>
-              );
-            })}
-          </ul>
+    data && (
+      <div className="w-40 ml-auto">
+        <p className="mb-1 text-xl text-green-500 font-extrabold">Duolingo</p>
+        <div className="flex justify-between items-center">
+          <FireIcon
+            className="size-5 transition-colors duration-700"
+            color={isStreakExtendedToday ? 'orange' : 'gray'}
+          />
+          <span className="text-gray-500">{data.streak} Daily streak</span>
         </div>
-      )}
-    </div>
+        <ul>
+          {data.courses.map(({ id, learningLanguage, title, xp }: any) => {
+            return (
+              <li key={id} className="flex justify-between items-center">
+                <Flag code={learningLanguage} alt={title} />
+                <span className="text-gray-500">{xp}xp</span>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    )
   );
 }
