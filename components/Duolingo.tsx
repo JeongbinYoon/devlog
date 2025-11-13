@@ -33,7 +33,9 @@ export default function Duolingo({ userData: data }: DuolingoProps) {
 
   useEffect(() => {
     if (data) {
-      const currentStreakEndDate = data.streakData.currentStreak.endDate;
+      const currentStreakEndDate = data.streakData?.currentStreak?.endDate;
+      if (!currentStreakEndDate) return;
+
       const [year, month, day] = currentStreakEndDate.split('-').map(Number);
       const endDate = new Date(year, month - 1, day);
       const today = new Date();
