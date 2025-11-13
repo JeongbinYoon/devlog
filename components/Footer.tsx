@@ -10,6 +10,7 @@ export default async function Footer() {
   };
 
   const duolingoUserData = await fetchDuolingoData();
+  console.log('duolingoUserData', duolingoUserData);
   return (
     <div className="bg-gray-200 mt-auto px-10 py-7">
       <div className="max-w-3xl mx-auto">

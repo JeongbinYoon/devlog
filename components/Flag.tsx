@@ -1,9 +1,4 @@
-const FLAG_CODE = {
-  ru: 'ru',
-  ja: 'jp',
-  en: 'us',
-  es: 'es',
-};
+import { FLAG_CODE } from '@/app/constants';
 
 type FlagProps = {
   code: keyof typeof FLAG_CODE;

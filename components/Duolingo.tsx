@@ -3,10 +3,31 @@
 import { FireIcon } from '@heroicons/react/24/solid';
 import { useEffect, useState } from 'react';
 import { Flag } from '@/components';
+import { FLAG_CODE } from '@/app/constants';
+
+type Course = {
+  id: string;
+  learningLanguage: keyof typeof FLAG_CODE;
+  title: string;
+  xp: number;
+};
+
+type StreakData = {
+  currentStreak: {
+    endDate: string;
+  };
+};
+
+type DuolingoUserData = {
+  streak: number;
+  streakData: StreakData;
+  courses: Course[];
+};
 
 type DuolingoProps = {
-  userData: any;
+  userData: DuolingoUserData;
 };
+
 export default function Duolingo({ userData: data }: DuolingoProps) {
   const [isStreakExtendedToday, setTsStreakExtendedToday] = useState(false);
 
@@ -34,7 +55,7 @@ export default function Duolingo({ userData: data }: DuolingoProps) {
           <span className="text-gray-500">{data.streak} Daily streak</span>
         </div>
         <ul>
-          {data.courses.map(({ id, learningLanguage, title, xp }: any) => {
+          {data.courses.map(({ id, learningLanguage, title, xp }: Course) => {
             return (
               <li key={id} className="flex justify-between items-center">
                 <Flag code={learningLanguage} alt={title} />

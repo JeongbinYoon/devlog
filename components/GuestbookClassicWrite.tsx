@@ -6,8 +6,8 @@ import {
   guestbookInputPasswordAtom,
   guestbookInputContentAtom,
 } from '@/app/atoms/appAtoms';
-import { useRef, useState } from 'react';
-import { useAtom, useSetAtom } from 'jotai';
+import { useRef } from 'react';
+import { useAtom } from 'jotai';
 
 type GuestbookClassicWriteProps = {
   onGetGuestBookEntries: () => void;

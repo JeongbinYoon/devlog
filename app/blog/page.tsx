@@ -1,4 +1,3 @@
-import { Duolingo } from '@/components';
 import { getSortedPostsData } from '@/lib/posts';
 import Link from 'next/link';
 

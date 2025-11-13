@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const cache: Record<string, { data: any; timestamp: number }> = {};
+const cache: Record<string, { data: unknown; timestamp: number }> = {};
 const CACHE_TTL = (60 * 60) & 1000;
 
 export async function GET(req: Request) {
@@ -35,7 +35,10 @@ export async function GET(req: Request) {
     cache[username] = { data, timestamp: Date.now() };
 
     return NextResponse.json({ data, cached: false });
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+  } catch (e) {
+    if (e instanceof Error) {
+      return NextResponse.json({ error: e.message }, { status: 500 });
+    }
+    return NextResponse.json({ error: 'Unknown error' }, { status: 500 });
   }
 }
