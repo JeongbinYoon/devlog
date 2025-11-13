@@ -2,8 +2,18 @@ import { Duolingo } from '@/components';
 import { getSortedPostsData } from '@/lib/posts';
 import Link from 'next/link';
 
-const BlogPage = () => {
+const BlogPage = async () => {
   const allPostsData = getSortedPostsData();
+
+  const fetchDuolingoData = async () => {
+    const res = await fetch(
+      `https://www.duolingo.com/2017-06-30/users?username=${process.env.DUOLINGO_ID}`
+    );
+    const json = await res.json();
+    return json?.users?.[0];
+  };
+
+  const duolingoUserData = await fetchDuolingoData();
 
   return (
     <div className="max-w-3xl mx-auto mt-12 px-5 md:px-0">
@@ -17,7 +27,7 @@ const BlogPage = () => {
           </li>
         ))}
       </ul>
-      {<Duolingo />}
+      {duolingoUserData && <Duolingo userData={duolingoUserData} />}
     </div>
   );
 };
