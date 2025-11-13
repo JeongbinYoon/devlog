@@ -86,3 +86,9 @@ export const MONITOR_DIMENSIONS = {
   depth: 0.05,
   frameWidth: 0.1,
 };
+export const FLAG_CODE = {
+  ru: 'ru',
+  ja: 'jp',
+  en: 'us',
+  es: 'es',
+};
