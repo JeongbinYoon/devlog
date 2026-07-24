@@ -26,7 +26,11 @@ export const getSortedPostsData = () => {
       if (!isPublished) return null;
 
       const formattedDate = formatDate(matterResult.data.date);
-      const slug = matterResult.data.title.toLowerCase().replace(/\s+/g, '-');
+      // 특수 기호 제거 및 공백을 하이픈으로 변경 (Windows 파일 경로 오류 방지)
+      const slug = matterResult.data.title
+        .toLowerCase()
+        .replace(/[^\w\s\uAC00-\uD7A3\u3131-\u318E-]/g, '')
+        .replace(/\s+/g, '-');
 
       return {
         id,
